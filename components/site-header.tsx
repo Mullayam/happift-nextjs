@@ -139,7 +139,7 @@ export function SiteHeader() {
             ) : (
               <Link
                 rel="noreferrer"
-                href="auth/login"
+                href="/auth/login"
                 className={buttonVariants({
                   variant: "destructive",
                   size: "lg",

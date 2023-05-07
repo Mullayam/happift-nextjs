@@ -14,7 +14,20 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        body: [
+          "Raleway",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "system-ui",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "Noto Sans",
+          "sans-serif",
+        ],
+        sans: ["var(--font-sans)", "Raleway", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

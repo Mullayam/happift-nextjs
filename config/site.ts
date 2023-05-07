@@ -24,10 +24,10 @@ export const siteConfig: SiteConfig = {
     {
       title: "Gift Cards",
       href: "/n/gift-cards",
-    },   
+    },
     {
       title: "Contact -Us",
-      href: "/contact-us",
+      href: "/n/contact-us",
     },
   ],
   links: {
@@ -36,3 +36,41 @@ export const siteConfig: SiteConfig = {
     docs: "https://ui.shadcn.com",
   },
 }
+// const Navbar = (props) => {
+//   return {
+//     Home: [
+//       {
+//         title: "Home",
+//         href: "/",
+//       },
+//       {
+//         title: "Gift Cards",
+//         href: "/n/gift-cards",
+//       },
+//     ],
+//     Settings: [
+//       {
+//         title: "Profile",
+//         href: "/",
+//       },
+//       {
+//         title: "ApiKeys",
+//         href: "/n/gift-cards",
+//         submenu: [
+//           {
+//             title: "Generate",
+//             href: "/",
+//           },
+//           {
+//             title: "Show All",
+//             href: "/",
+//           },
+//         ],
+//       },
+//       {
+//         title: "More",
+//         submenu: ["Calenders", "etc", "etc2"],
+//       },
+//     ],
+//   }
+// }

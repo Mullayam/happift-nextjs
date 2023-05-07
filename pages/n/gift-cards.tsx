@@ -1,10 +1,12 @@
-import Head from "next/head"
-import Link from "next/link"
+import Head from "next/head";
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import DisplayCard from "@/components/display-card"
+
+
+import { siteConfig } from "@/config/site";
+import DisplayCard from "@/components/display-card";
 import { Layout } from "@/components/layout"
-import { SiteFooter } from "@/components/site-footer"
+import { SiteFooter1 } from "@/components/site-footer"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function IndexPage() {
@@ -35,7 +37,7 @@ export default function IndexPage() {
         <DisplayCard worth={"Rs .250"} />
         <DisplayCard worth={"Rs .500"} />
       </section>
-      <SiteFooter />
+      <SiteFooter1 />
     </Layout>
   )
 }
