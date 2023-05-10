@@ -31,7 +31,13 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-        <UserAuthForm />
+        <UserAuthForm  type="signin"/>
+         <p className="px-8 text-center text-sm text-slate-600">
+          <Link  href="/n/forget-password">
+           Trouble Sigining In ?  {" "}
+           <span className="underline underline-offset-4">Forget Password</span>
+          </Link>
+        </p>
         <p className="px-8 text-center text-sm text-slate-600">
           <Link className="underline underline-offset-4" href="/auth/register">
             Don&apos;t have an account? Sign Up

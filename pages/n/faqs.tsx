@@ -23,6 +23,10 @@ export default function FAQS() {
         />
       </Head>
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+      
+           <h1 className="mb-4 text-center text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+           We have put together some frequently asked questions (FAQs) to help you better understand our services and policies.
+          </h1>
         <Questions />
         <FAQs />
       </section>

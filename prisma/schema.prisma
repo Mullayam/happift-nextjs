@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  firstName   String
+  lastName    String      @default("")
+  phone       Int
+  email       String
+  password    String
+  role        ROLE        @default(F_3026)
+  permissions PERMISSIONS @default(B_555)
+  status      STATUS      @default(G_0x0000)
+}
+
+enum ROLE {
+  F_3026
+  U_0012
+  C_8256
+  K_3566
+}
+
+enum PERMISSIONS {
+  B_555
+  I_777
+  N_00
+}
+
+enum STATUS {
+  G_0x0000
+  E_0x0045
+  T_0x1100
+  O_0x0220
+  F_0x0001
+  F_0x0002
+}
