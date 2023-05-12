@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast"
+import { googleAuthUrl } from "@/services/oauth-google"
 import axios from "axios"
 
 import { cn } from "@/lib/utils"
@@ -11,6 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import Alerts from "./alert"
+import { Spinner } from "./spinner"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {}
 
@@ -21,8 +24,16 @@ export type InputData = {
   email: string
   password: string
 }
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const FormType = props.typeof
+export function UserAuthForm({
+  className,
+  type,
+  ...props
+}: {
+  type: string
+  className?: string
+  props?: UserAuthFormProps
+}) {
+  const FormType = type
   const [isLoading, setIsLoading] = React.useState(false)
   const [disabled, setDisabled] = React.useState(false)
   const [inputs, setInputs] = React.useState({
@@ -43,6 +54,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     // Simulate a login request
     await new Promise((resolve) => setTimeout(resolve, 1000))
     FormType === "signin" ? await LoginHandle() : await SignUpHandle()
+    setIsLoading(false)
   }
   async function LoginHandle() {
     const { data } = await axios.post("/api/auth/login", {
@@ -78,11 +90,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       return toast({
         title: "Something went wrong",
         description: data.message,
+        variant: "destructive",
       })
     }
   }
   function handleChangeInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     setInputs({ ...inputs, [e.target.id]: e.target.value })
+  }
+
+  function handleGoogleLogin() {
+    setIsLoading(true)
+    let params = `status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=-1000,top=-1000`
+    // window.open(googleAuthUrl, "Happift Account Progress", params)
   }
   React.useEffect(() => {
     if (FormType === "signin") {
@@ -97,8 +116,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setDisabled(true)
     }
   }, [FormType, inputs])
+
   return (
     <>
+      {isLoading && <Spinner>Hold On...</Spinner>}
       <form
         onSubmit={(event) => onSubmit(event)}
         className={cn("grid gap-6", className)}
@@ -163,7 +184,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       </form>
       <Separator />
 
-      <Button type="submit" disabled={isLoading} variant="outline">
+      <Button
+        onClick={handleGoogleLogin}
+        disabled={isLoading}
+        variant="outline"
+      >
         <Icons.google className="mr-2 h-5 w-5" />
         Continue with Google
       </Button>

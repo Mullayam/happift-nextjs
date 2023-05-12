@@ -103,7 +103,7 @@ export default function PrivacyPolicy() {
         </div>
       </main>
 
-      <SiteFooter1 />
+       
     </Layout>
   )
 }

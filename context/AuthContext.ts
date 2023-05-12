@@ -39,8 +39,8 @@ export default function AuthContext({
   const currentUser = async () => {
     setAuthState({ data: null, error: null, loading: true })
     try {
-      const jwt = getCookie("jwt")
-      if (!jwt) {
+      const access_token = getCookie("access_token")
+      if (!access_token) {
         return setAuthState({
           data: null,
           error: "Please Login",
@@ -49,10 +49,11 @@ export default function AuthContext({
       }
       const response = await axios.get("http://localhost:3000/api/auth/me", {
         headers: {
-          Authorization: "Bearer " + jwt,
+          Authorization: "Bearer " + access_token,
         },
       })
-      ;(axios.defaults.headers.common["Authorization"] = "Bearer " + jwt),
+      ;(axios.defaults.headers.common["Authorization"] =
+        "Bearer " + access_token),
         setAuthState({
           data: response.data.message,
           error: null,

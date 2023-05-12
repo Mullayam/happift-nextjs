@@ -6,7 +6,7 @@ import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "../../components/user-auth-form"
 
-export default function LoginPage() {
+export default function LoginPage(props) {
   return (
     <main className="flex h-screen items-center justify-center">
       <Link
@@ -33,7 +33,7 @@ export default function LoginPage() {
         </div>
         <UserAuthForm  type="signin"/>
          <p className="px-8 text-center text-sm text-slate-600">
-          <Link  href="/n/forget-password">
+          <Link  href="./forget-password">
            Trouble Sigining In ?  {" "}
            <span className="underline underline-offset-4">Forget Password</span>
           </Link>

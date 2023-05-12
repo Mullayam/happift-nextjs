@@ -5,7 +5,7 @@ import AboutUs from "@/components/AboutUs"
 import { Layout } from "@/components/layout"
 import { SiteFooter1 } from "@/components/site-footer"
 
-export default function About() {
+export default function About(props) {
   return (
     <Layout>
       <Head>
@@ -87,7 +87,7 @@ export default function About() {
         </div>
       </section>
 
-      <SiteFooter1 />
+      
     </Layout>
   )
 }

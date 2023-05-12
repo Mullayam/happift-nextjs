@@ -6,7 +6,7 @@ import { Layout } from "@/components/layout"
 import Questions from "@/components/questions"
 import { SiteFooter1 } from "@/components/site-footer"
 
-export default function Terms() {
+export default function Terms(props) {
   return (
     <Layout>
       <Head>
@@ -174,7 +174,7 @@ export default function Terms() {
           </div>
         </main>
       </section>
-      <SiteFooter1 />
+    
     </Layout>
   )
 }

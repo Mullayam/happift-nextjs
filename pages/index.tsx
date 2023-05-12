@@ -11,7 +11,7 @@ import Testimonials from "@/components/testimonials"
 import { buttonVariants } from "@/components/ui/button"
 
 
-export default function IndexPage() {
+export default function IndexPage(props) {
   return (
     <Layout>
       <Head>
@@ -121,7 +121,7 @@ export default function IndexPage() {
       <Team />
 
       <Testimonials />
-      <SiteFooter1 />
+     
     </Layout>
   )
 }

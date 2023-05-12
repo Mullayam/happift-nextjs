@@ -10,16 +10,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Users {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  google_id   String?      @default("")
   firstName   String
-  lastName    String      @default("")
-  phone       Int
-  email       String
+  lastName    String?      @default("")
+  phone       String?  @default("")
+  email       String   @unique
   password    String
+  avatar      String? @default("")
   role        ROLE        @default(F_3026)
   permissions PERMISSIONS @default(B_555)
   status      STATUS      @default(G_0x0000)
+  tokens      Tokens[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tokens {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  oauthAccessToken  String?   @default("")
+  oauthRefreshToken String?   @default("")
+  resetPassToken    String?   @default("")
+  extraTokens       String[]  @default([])
+  id_token          String?
+  userId            String    @db.ObjectId
+  User              Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  expiresAt         DateTime?
 }
 
 enum ROLE {

@@ -1,9 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-import { PrismaClient } from "@prisma/client"
-import bcrypt from "bcrypt"
-import { setCookie } from "cookies-next"
-import jwt from "jsonwebtoken"
-import validator from "validator"
+import type { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import { setCookie } from "cookies-next";
+import jwt from "jsonwebtoken";
+import validator from "validator";
+
+
+
+
 
 const prisma = new PrismaClient()
 
@@ -49,7 +53,7 @@ export default async function handler(
         throw new Error(errors[0])
       }
     })
-    const userWithEmail = await prisma.user.findUnique({
+    const userWithEmail = await prisma.users.findUnique({
       where: { email },
     })
 
@@ -60,21 +64,24 @@ export default async function handler(
     const UserData = {
       firstName,
       password: hashedPassword,
-      email,
       phone,
-    }
-    const CreateNewUser = new UserModel(UserData)
-    await CreateNewUser.save()
-    const secret = new TextEncoder().encode(
-      process.env.NEXT_PUBLIC_JWT_SECRET_TOKEN
-    )
-    let alg = "HS256"
-    const AuthToken = await new jwt.SignJWT({
       email,
-    })
-      .setProtectedHeader({ alg })
-      .setExpirationTime("10d")
-      .sign(secret)
+    }
+    const response = await prisma.users.create({ data: UserData })
+
+    const AuthToken = jwt.sign(
+      {
+        id: response.id,
+        name: response.firstName + " " + response.lastName,
+        email: response.email,
+        status: response.status,
+        role: response.role,
+        avatar: response.avatar,
+      },
+      process.env.ENCRYPTION_KEY,
+      { expiresIn: "24h" }
+    )
+
     setCookie("access_token", AuthToken, { req, res, maxAge: 60 * 60 * 24 })
     return res.status(200).json({
       success: true,

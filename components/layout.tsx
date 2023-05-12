@@ -1,4 +1,8 @@
+import { Suspense } from "react"
+import Loading from "@/pages/loading"
+
 import { SiteHeader } from "@/components/site-header"
+import { SiteFooter1 } from "./site-footer"
 
 interface LayoutProps {
   children: React.ReactNode
@@ -7,8 +11,11 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   return (
     <>
-      <SiteHeader />
+      <Suspense fallback={<Loading />}>
+        <SiteHeader />
+      </Suspense>
       <main>{children}</main>
+      <SiteFooter1 />
     </>
   )
 }

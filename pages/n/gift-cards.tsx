@@ -37,7 +37,7 @@ export default function IndexPage() {
         <DisplayCard worth={"Rs .250"} />
         <DisplayCard worth={"Rs .500"} />
       </section>
-      <SiteFooter1 />
+       
     </Layout>
   )
 }

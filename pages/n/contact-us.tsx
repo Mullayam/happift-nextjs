@@ -4,7 +4,7 @@ import ContactUsForm from "@/components/contactForm"
 import { Layout } from "@/components/layout"
 import { SiteFooter1 } from "@/components/site-footer"
 
-export default function IndexPage() {
+export default function IndexPage(props) {
   return (
     <Layout>
       <Head>
@@ -23,7 +23,7 @@ export default function IndexPage() {
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <ContactUsForm />
       </section>
-      <SiteFooter1 />
+     
     </Layout>
   )
 }
