@@ -36,11 +36,11 @@ model Tokens {
   resetPassToken    String?   @default("")
   extraTokens       String[]  @default([])
   id_token          String?
-  userId            String    @db.ObjectId
+  userId            String    @db.ObjectId 
   User              Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
-  expiresAt         DateTime?
+  expiresAt         String?
 }
 
 enum ROLE {

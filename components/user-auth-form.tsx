@@ -2,17 +2,18 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast"
-import { googleAuthUrl } from "@/services/oauth-google"
-import axios from "axios"
+import { toast } from "@/hooks/use-toast";
+import { googleAuthUrl } from "@/services/oauth-google";
+import axios from "axios";
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+
+
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import Alerts from "./alert"
 import { Spinner } from "./spinner"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {}
@@ -45,6 +46,7 @@ export function UserAuthForm({
   })
 
   const router = useRouter()
+
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     toast({
@@ -101,7 +103,7 @@ export function UserAuthForm({
   function handleGoogleLogin() {
     setIsLoading(true)
     let params = `status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=-1000,top=-1000`
-    // window.open(googleAuthUrl, "Happift Account Progress", params)
+    window.open(googleAuthUrl, "Happift Account Progress", params)
   }
   React.useEffect(() => {
     if (FormType === "signin") {

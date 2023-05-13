@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Hapiift from "@/public/fullLogo.png";
-import GoogleImg from "@/public/google.png"
-import Logo from "@/public/logo3.png"
-import {
-  Laptop,
-  Moon,
-  SunMedium,
-  Twitter,
-  type Icon as LucideIcon,
-} from "lucide-react"
+import GoogleImg from "@/public/google.png";
+import Logo from "@/public/logo3.png";
+import { Laptop, Moon, SunMedium, Twitter, type Icon as LucideIcon } from "lucide-react";
+
+
+
+
 
 export type Icon = LucideIcon
 
@@ -20,9 +18,7 @@ export const Icons = {
   happift: (props) => (
     <Image {...props} src={Hapiift} width="auto" height="auto" alt="Happift" />
   ),
-  logo: (props) => (
-    <Image {...props} src={Logo} width="48" height="48" alt="Happift" />
-  ),
+  logo: () => <Image src={Logo} width="48" height="48" alt="Happift" />,
   google: (props) => (
     <Image
       {...props}

@@ -12,15 +12,17 @@ import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 
-export default function ForgetPassword() {
+export default function ForgetPassword(props) {
+  const router = useRouter()
   const [email, setEmail] = React.useState("")
   async function SendResetPasswordLinkHandler() {
     const { data } = await axios.post("/api/auth/reset-password", { email })
     if (data.success) {
-      return toast({
+      toast({
         title: "Check your email",
         description: data.message,
       })
+      return router.push("/auth/login")
     } else {
       return toast({
         title: "Something went wrong",
