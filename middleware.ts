@@ -28,6 +28,7 @@ export async function middleware(request: NextRequest, res: NextResponse) {
   if (request.nextUrl.pathname.startsWith("/auth")) {
     if (request.cookies.has("access_token")) {
       const loginUrl = new URL("/", request.url)
+      
       return NextResponse.redirect(loginUrl)
     }
   }
@@ -35,11 +36,10 @@ export async function middleware(request: NextRequest, res: NextResponse) {
   if (request.nextUrl.pathname.startsWith("/user")) {
     CheckLogin()
   }
-
   function CheckLogin() {
     const loginUrl = new URL("/auth/login", request.url)
     if (request.cookies.has("access_token")) {
-      // console.log(request.cookies.get("access_token"))
+      console.log(request.cookies.get("access_token"))
     } else {
       loginUrl.searchParams.set("from", request.nextUrl.pathname)
     }

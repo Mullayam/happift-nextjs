@@ -57,6 +57,22 @@ export default function ContactUsForm({
           >
             <div>
               <Label
+                htmlFor="Full Name"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Full Name
+              </Label>
+              <Input
+                id="fullName"
+                type="text"
+                placeholder="Enter your Full Name"
+                disabled={isLoading}
+                className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
+                defaultValue="John Doe"
+              />
+            </div>
+            <div>
+              <Label
                 htmlFor="email"
                 className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
               >

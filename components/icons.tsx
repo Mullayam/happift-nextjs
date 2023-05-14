@@ -18,7 +18,9 @@ export const Icons = {
   happift: (props) => (
     <Image {...props} src={Hapiift} width="auto" height="auto" alt="Happift" />
   ),
-  logo: () => <Image src={Logo} width="48" height="48" alt="Happift" />,
+  logo: (props) => (
+    <Image src={Logo} {...props} width="48" height="48" alt="Happift" />
+  ),
   google: (props) => (
     <Image
       {...props}

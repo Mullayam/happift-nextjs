@@ -1,6 +1,6 @@
-import { useContext } from "react"
+import React, { useContext } from "react"
 import axios from "axios"
-import { removeCookies } from "cookies-next"
+import { getCookie, removeCookies } from "cookies-next"
 
 import { AuthenticationContext } from "../context/AuthContext"
 
@@ -97,6 +97,40 @@ const useAuth = () => {
       loading: false,
     })
   }
+  const currentUser = async () => {
+    setAuthState({ data: null, error: null, loading: true })
+    try {
+      const access_token = getCookie("access_token")
+      if (!access_token) {
+        return setAuthState({
+          data: null,
+          error: "Please Login",
+          loading: false,
+        })
+      }
+      const response = await axios.get("http://localhost:3000/api/auth/me", {
+        headers: {
+          Authorization: "Bearer " + access_token,
+        },
+      })
+      ;(axios.defaults.headers.common["Authorization"] =
+        "Bearer " + access_token),
+        setAuthState({
+          data: response.data.message,
+          error: null,
+          loading: false,
+        })
+    } catch (error: any) {
+      setAuthState({
+        data: null,
+        error: error.response.data.message,
+        loading: false,
+      })
+    }
+  }
+  React.useEffect(() => {
+    currentUser()
+  }, [])
   return { signin, signup, signout }
 }
 

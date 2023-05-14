@@ -3,10 +3,15 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { setAuth } from "@/redux/slices/isAuthSlice"
+import { setLoader } from "@/redux/slices/loaderSlice"
 import { googleAuthUrl } from "@/services/oauth-google";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux"
 
 
+
+// updated
 
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
@@ -15,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "./spinner"
+
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {}
 
@@ -34,6 +40,8 @@ export function UserAuthForm({
   className?: string
   props?: UserAuthFormProps
 }) {
+  const dispatch = useDispatch()
+
   const FormType = type
   const [isLoading, setIsLoading] = React.useState(false)
   const [disabled, setDisabled] = React.useState(false)
@@ -49,14 +57,15 @@ export function UserAuthForm({
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    toast({
-      title: "Ruko Zara, Sabar Kro...",
-    })
     setIsLoading(true)
-    // Simulate a login request
+    toast({
+      title: "Are Ruko Zara, Sabar Kro...",
+    })
+    dispatch(setLoader(true))
     await new Promise((resolve) => setTimeout(resolve, 1000))
     FormType === "signin" ? await LoginHandle() : await SignUpHandle()
     setIsLoading(false)
+    dispatch(setLoader(false))
   }
   async function LoginHandle() {
     const { data } = await axios.post("/api/auth/login", {
@@ -64,14 +73,15 @@ export function UserAuthForm({
       password: inputs.password,
     })
     if (data.success) {
-      setTimeout(() => {
-        router.push("/")
-      }, 4000)
+      dispatch(setAuth(true))
+
+      router.push("/")
       return toast({
         title: "Redirecting...",
         description: data.message,
       })
     } else {
+      router.push("/")
       return toast({
         title: "Something went wrong",
         description: data.message,
@@ -81,9 +91,6 @@ export function UserAuthForm({
   async function SignUpHandle() {
     const { data } = await axios.post("/api/auth/new", inputs)
     if (data.success) {
-      setTimeout(() => {
-        router.push("/")
-      }, 4000)
       return toast({
         title: "Redirecting...",
         description: data.message,
@@ -101,7 +108,7 @@ export function UserAuthForm({
   }
 
   function handleGoogleLogin() {
-    setIsLoading(true)
+    dispatch(setLoader(true))
     let params = `status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=-1000,top=-1000`
     window.open(googleAuthUrl, "Happift Account Progress", params)
   }
@@ -121,7 +128,7 @@ export function UserAuthForm({
 
   return (
     <>
-      {isLoading && <Spinner>Hold On...</Spinner>}
+      {/* {isLoading && <Spinner>Hold On...</Spinner>} */}
       <form
         onSubmit={(event) => onSubmit(event)}
         className={cn("grid gap-6", className)}

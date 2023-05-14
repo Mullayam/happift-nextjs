@@ -1,4 +1,8 @@
 import React from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { toast } from "@/hooks/use-toast"
+import { removeCookies } from "cookies-next"
 import {
   CreditCard,
   Keyboard,
@@ -13,7 +17,7 @@ import {
 } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +33,58 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+const UserMenu = [
+  {
+    id: 1,
+    icon: <User className="mr-2 h-4 w-4" />,
+    href: "/user/my-account",
+    label: "My Profile",
+    rsc: "",
+  },
+
+  {
+    id: 2,
+    icon: <User className="mr-2 h-4 w-4" />,
+    href: "/user/my-listings",
+
+    label: "My Listing",
+    rsc: "",
+  },
+  {
+    id: 5,
+    icon: <Keyboard className="mr-2 h-4 w-4" />,
+    href: "/user/my-orders",
+
+    label: "My Orders",
+    rsc: "",
+  },
+  {
+    id: 8,
+    icon: <Keyboard className="mr-2 h-4 w-4" />,
+    href: "/user/payout-details",
+
+    label: "Payouts",
+    rsc: "",
+  },
+  {
+    id: 50,
+    icon: <CreditCard className="mr-2 h-4 w-4" />,
+    href: "/user/wallet",
+
+    label: "My Wallet",
+    rsc: "",
+  },
+]
 export default function UserDropdownMenu() {
+  const router = useRouter()
+  async function handleLogout() {
+    removeCookies("access_token")
+    toast({
+      title: "Logout Successfully",
+    })
+    router.push("/")
+  }
+  React.useEffect(() => {}, [])
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,53 +99,41 @@ export default function UserDropdownMenu() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>My Profile</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>My Listing</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem>
-            <Keyboard className="mr-2 h-4 w-4" />
-            <span>My Orders</span>
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Keyboard className="mr-2 h-4 w-4" />
-            <span>My Wallet</span>
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          {UserMenu.map((item) => {
+            return (
+              <DropdownMenuItem key={item.id}>
+                {item.icon}
+                <Link href={item.href}> {item.label}</Link>
+                <DropdownMenuShortcut> {item.rsc}</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            )
+          })}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <Link href={"/n/"}>Settings</Link>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <UserPlus className="mr-2 h-4 w-4" />
-              <span>Invite users</span>
+              <Link href={"/n/"}>Invite users</Link>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent forceMount>
                 <DropdownMenuItem>
                   <Mail className="mr-2 h-4 w-4" />
-                  <span>Email</span>
+                  <Link href={"/n/"}>Email</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Message</span>
+                  <Link href={"/n/"}>Message</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <PlusCircle className="mr-2 h-4 w-4" />
-                  <span>More...</span>
+                  <Link href={"/n/"}>More...</Link>
                 </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
@@ -100,8 +143,7 @@ export default function UserDropdownMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          <span onClick={handleLogout}>Log out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
