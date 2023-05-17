@@ -1,4 +1,8 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server";
+
+
+
+
 
 export async function middleware(request: NextRequest, res: NextResponse) {
   if (request.nextUrl.pathname.startsWith("/api/v1/")) {
@@ -28,25 +32,26 @@ export async function middleware(request: NextRequest, res: NextResponse) {
   if (request.nextUrl.pathname.startsWith("/auth")) {
     if (request.cookies.has("access_token")) {
       const loginUrl = new URL("/", request.url)
-      
       return NextResponse.redirect(loginUrl)
     }
   }
 
   if (request.nextUrl.pathname.startsWith("/user")) {
-    CheckLogin()
-  }
-  function CheckLogin() {
-    const loginUrl = new URL("/auth/login", request.url)
+    let loginUrl = new URL("/auth/login", request.url)
+    loginUrl.searchParams.set("callbackURL", request.nextUrl.pathname)
     if (request.cookies.has("access_token")) {
       console.log(request.cookies.get("access_token"))
     } else {
-      loginUrl.searchParams.set("from", request.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
     }
   }
 }
 
 // only these routes use middleware
 export const config = {
-  matcher: ["/api/v1/:path*", "/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/api/v1/:path*",
+    "/user",
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+  ],
 }

@@ -1,14 +1,20 @@
 import Link from "next/link"
+import { RootState } from "@/redux/store"
 import { ChevronLeft } from "lucide-react"
+import { useSelector } from "react-redux"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import { Spinner } from "@/components/spinner"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "../../components/user-auth-form"
 
 export default function LoginPage(props) {
+  const { isLoading } = useSelector((state: RootState) => state.loader)
+
   return (
     <main className="flex h-screen items-center justify-center">
+      {isLoading ? <Spinner /> : null}
       <Link
         href="/"
         className={cn(
@@ -31,11 +37,13 @@ export default function LoginPage(props) {
             </p>
           </div>
         </div>
-        <UserAuthForm  type="signin"/>
-         <p className="px-8 text-center text-sm text-slate-600">
-          <Link  href="./forget-password">
-           Trouble Sigining In ?  {" "}
-           <span className="underline underline-offset-4">Forget Password</span>
+        <UserAuthForm type="signin" />
+        <p className="px-8 text-center text-sm text-slate-600">
+          <Link href="./forget-password">
+            Trouble Sigining In ?{" "}
+            <span className="underline underline-offset-4">
+              Forget Password
+            </span>
           </Link>
         </p>
         <p className="px-8 text-center text-sm text-slate-600">

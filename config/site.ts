@@ -11,7 +11,8 @@ interface SiteConfig {
     docs: string
   }
 }
-
+let PAYTM_STATUS_QUERY_NEW_URL
+let PAYTM_TXN_URL
 export const siteConfig: SiteConfig = {
   name: "Happift",
   description:
@@ -91,4 +92,16 @@ const UserNavbar = () => {
       },
     ],
   }
+}
+let websiteType
+if (process.env.PAYTM_ENVIRONMENT === "DEV") {
+  websiteType = "WEBSTAGING"
+} else {
+  websiteType = "DEFAULT"
+}
+export const PaytmConfig = {
+  mid: process.env.PAYTM_MERCHANT_ID,
+  key: process.env.PAYTM_MERCHANT_KEY,
+  website: websiteType,
+  callbackUrl: "http://localhost:3000/user/payment/response",
 }

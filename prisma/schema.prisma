@@ -23,6 +23,8 @@ model Users {
   permissions PERMISSIONS @default(B_555)
   status      STATUS      @default(G_0x0000)
   tokens      Tokens[]
+  orders      Orders[]
+  payements   Payements[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,7 +39,7 @@ model Tokens {
   extraTokens       String[] @default([])
   id_token          String?
   userId            String   @db.ObjectId
-  User              Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   expiresAt         String?
@@ -70,6 +72,57 @@ model Support {
   fullName String
   email    String
   message  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GiftCards {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  cardName    String
+  image       String
+  stock       Int
+  isAvailable Boolean
+  worth       Int
+  buyPrice    Int
+  categoryId  Categories[]
+  orders      Orders[]
+  Payements   Payements[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Categories {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  catgoryName String
+  categoryId  String    @db.ObjectId
+  giftCards   GiftCards @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model Orders {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  giftcardName String
+  giftcardId   String      @db.ObjectId
+  giftCards    GiftCards   @relation(fields: [giftcardId], references: [id], onDelete: Cascade)
+  userId       String      @db.ObjectId
+  user         Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payements    Payements[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payements {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  orderId String @db.ObjectId
+  order   Orders @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  userId     String    @db.ObjectId
+  User       Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  giftcardId String    @db.ObjectId
+  giftCards  GiftCards @relation(fields: [giftcardId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -2,7 +2,9 @@ import React from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { toast } from "@/hooks/use-toast"
-import { removeCookies } from "cookies-next"
+import { setAuth, setUserData } from "@/redux/slices/isAuthSlice"
+import { useAppDispatch } from "@/redux/store"
+import { deleteCookie } from "cookies-next"
 import {
   CreditCard,
   Keyboard,
@@ -77,14 +79,17 @@ const UserMenu = [
 ]
 export default function UserDropdownMenu() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   async function handleLogout() {
-    removeCookies("access_token")
+    deleteCookie("access_token")
+    dispatch(setAuth(false))
+    dispatch(setUserData(null))
     toast({
       title: "Logout Successfully",
     })
     router.push("/")
   }
-  React.useEffect(() => {}, [])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

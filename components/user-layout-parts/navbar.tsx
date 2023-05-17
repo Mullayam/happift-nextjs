@@ -19,14 +19,12 @@ export default function UserLayoutNavbar() {
             </Link>
           </div>
           <div className="flex items-center">
-            <button
-              className="mr-4 block w-full rounded-full
-      border-0 bg-violet-700 p-2  px-4 text-sm text-white
-    file:py-2 file:font-semibold
-      hover:bg-indigo-500 "
-            >
-              Mullayam
+            <button className="mr-2 inline-block rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75">
+              <span className="block rounded-full bg-white px-8 py-3 text-sm font-medium hover:bg-transparent">
+                Mullayam
+              </span>
             </button>
+
             <div className="mr-3 flex items-center">
               <UserDropdownMenu />
             </div>

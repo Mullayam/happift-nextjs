@@ -1,11 +1,14 @@
 import type { AppProps } from "next/app";
 import { Inter as FontSans } from "@next/font/google";
-import { ThemeProvider } from "next-themes"
-import { Provider } from "react-redux"
+import { ThemeProvider } from "next-themes";
+import { Provider } from "react-redux";
 
-import { Toaster } from "@/components/ui/toaster"
-import { store } from "../redux/store"
-import "@/styles/globals.css"
+
+
+import { Toaster } from "@/components/ui/toaster";
+import { store } from "../redux/store";
+import "@/styles/globals.css";
+
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -14,8 +17,6 @@ const fontSans = FontSans({
 })
 
 export default function App({ Component, pageProps }) {
-  // const { store } = StoreWrapper.useWrappedStore(pageProps)
-
   return (
     <>
       <Toaster />

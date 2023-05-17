@@ -2,25 +2,23 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "@/hooks/use-toast";
+import { useRouter as Redirecting } from "next/router"
+import { toast } from "@/hooks/use-toast"
 import { setAuth } from "@/redux/slices/isAuthSlice"
 import { setLoader } from "@/redux/slices/loaderSlice"
-import { googleAuthUrl } from "@/services/oauth-google";
-import axios from "axios";
+import { googleAuthUrl } from "@/services/oauth-google"
+import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
-
-
 
 // updated
 
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Spinner } from "./spinner"
-
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {}
 
@@ -41,6 +39,8 @@ export function UserAuthForm({
   props?: UserAuthFormProps
 }) {
   const dispatch = useDispatch()
+  const router = useRouter()
+  const change = Redirecting()
 
   const FormType = type
   const [isLoading, setIsLoading] = React.useState(false)
@@ -53,7 +53,10 @@ export function UserAuthForm({
     password: "",
   })
 
-  const router = useRouter()
+  let callbackURL
+  if (change.query) {
+    callbackURL = change.query.callbackURL
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -64,7 +67,6 @@ export function UserAuthForm({
     dispatch(setLoader(true))
     await new Promise((resolve) => setTimeout(resolve, 1000))
     FormType === "signin" ? await LoginHandle() : await SignUpHandle()
-    setIsLoading(false)
     dispatch(setLoader(false))
   }
   async function LoginHandle() {
@@ -74,17 +76,17 @@ export function UserAuthForm({
     })
     if (data.success) {
       dispatch(setAuth(true))
-
-      router.push("/")
+      router.push(callbackURL)
       return toast({
         title: "Redirecting...",
         description: data.message,
       })
     } else {
-      router.push("/")
+      setIsLoading(false)
       return toast({
         title: "Something went wrong",
         description: data.message,
+        variant: "destructive",
       })
     }
   }
@@ -131,7 +133,7 @@ export function UserAuthForm({
       {/* {isLoading && <Spinner>Hold On...</Spinner>} */}
       <form
         onSubmit={(event) => onSubmit(event)}
-        className={cn("grid gap-6", className)}
+        className={cn("grid gap-6 p-4", className)}
         {...props}
       >
         <div className="flex flex-col space-y-4">
@@ -192,15 +194,16 @@ export function UserAuthForm({
         </div>
       </form>
       <Separator />
-
-      <Button
-        onClick={handleGoogleLogin}
-        disabled={isLoading}
-        variant="outline"
-      >
-        <Icons.google className="mr-2 h-5 w-5" />
-        Continue with Google
-      </Button>
+      <div className="grid gap-6 p-4">
+        <Button
+          onClick={handleGoogleLogin}
+          disabled={isLoading}
+          variant="outline"
+        >
+          <Icons.google className="mr-2 h-5 w-5 " />
+          Continue with Google
+        </Button>
+      </div>
     </>
   )
 }

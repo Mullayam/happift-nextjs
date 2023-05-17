@@ -73,3 +73,13 @@ export async function SendEmail(sendTo, subject, body, html) {
     html: html, // html body
   })
 }
+export async function retriveCookie(allCookies: any) {
+  let response: {}
+  allCookies.map((cookie) => {
+    const [cookieName, value] = cookie.split("=")
+    if (cookieName === " paymentResponse") {
+      return (response = { cookieName, value })
+    }
+  })
+  return await response
+}

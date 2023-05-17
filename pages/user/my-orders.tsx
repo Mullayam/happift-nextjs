@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head"
 
-import { SiteFooter } from "@/components/site-footer"
 import UserLayout from "./layout"
 
 export default function AccountSettings(props) {

@@ -14,9 +14,9 @@ export default function BuySteps() {
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-5 w-5"
                   viewBox="0 0 24 24"
                 >
@@ -41,9 +41,9 @@ export default function BuySteps() {
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-5 w-5"
                   viewBox="0 0 24 24"
                 >
@@ -68,9 +68,9 @@ export default function BuySteps() {
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-5 w-5"
                   viewBox="0 0 24 24"
                 >
@@ -96,9 +96,9 @@ export default function BuySteps() {
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-5 w-5"
                   viewBox="0 0 24 24"
                 >
@@ -121,9 +121,9 @@ export default function BuySteps() {
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-5 w-5"
                   viewBox="0 0 24 24"
                 >

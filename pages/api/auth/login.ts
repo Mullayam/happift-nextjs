@@ -2,9 +2,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { setCookie } from "cookies-next";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-import make from "@/lib/secure"
+
+
+import make from "@/lib/secure";
+
 
 const prisma = new PrismaClient()
 type Data = {
@@ -63,7 +66,7 @@ export default async function handler(
     setCookie("access_token", SecurityToken, {
       req,
       res,
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60,
       // httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     })
