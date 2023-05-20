@@ -45,7 +45,7 @@ export default function IndexPage(props) {
             </p>
           </div>
           <div className="flex gap-4">
-            <Link
+            {/* <Link
               href={siteConfig.links.docs}
               target="_blank"
               rel="noreferrer"
@@ -60,7 +60,7 @@ export default function IndexPage(props) {
               className={buttonVariants({ variant: "outline", size: "lg" })}
             >
               Cards
-            </Link>
+            </Link> */}
           </div>
 
        

@@ -27,6 +27,10 @@ export const siteConfig: SiteConfig = {
       href: "/n/gift-cards",
     },
     {
+      title: "Gift Cards",
+      href: "/n/gift-cards",
+    },
+    {
       title: "Contact -Us",
       href: "/n/contact-us",
     },
@@ -55,44 +59,7 @@ export const siteConfig: SiteConfig = {
 //                 <span className="ml-3">Dashboard</span>
 //               </Link>
 //             </li>
-const UserNavbar = () => {
-  return {
-    Home: [
-      {
-        title: "Home",
-        href: "/",
-      },
-      {
-        title: "Gift Cards",
-        href: "/n/gift-cards",
-      },
-    ],
-    Settings: [
-      {
-        title: "Profile",
-        href: "/",
-      },
-      {
-        title: "ApiKeys",
-        href: "/n/gift-cards",
-        submenu: [
-          {
-            title: "Generate",
-            href: "/",
-          },
-          {
-            title: "Show All",
-            href: "/",
-          },
-        ],
-      },
-      {
-        title: "More",
-        submenu: ["Calenders", "etc", "etc2"],
-      },
-    ],
-  }
-}
+ 
 let websiteType
 if (process.env.PAYTM_ENVIRONMENT === "DEV") {
   websiteType = "WEBSTAGING"

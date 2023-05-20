@@ -118,28 +118,25 @@ export default function UserDropdownMenu() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
-            <Link href={"/n/"}>Settings</Link>
+            <Link href={"/user/account-settings"}>Settings</Link>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <UserPlus className="mr-2 h-4 w-4" />
-              <Link href={"/n/"}>Invite users</Link>
+              <Link href={""}>Invite users</Link>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent forceMount>
                 <DropdownMenuItem>
                   <Mail className="mr-2 h-4 w-4" />
-                  <Link href={"/n/"}>Email</Link>
+                  <Link href={""}>Email</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <MessageSquare className="mr-2 h-4 w-4" />
-                  <Link href={"/n/"}>Message</Link>
+                  <Link href={""}>Message</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  <Link href={"/n/"}>More...</Link>
-                </DropdownMenuItem>
+               
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>

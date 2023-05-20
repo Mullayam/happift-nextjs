@@ -1,16 +1,14 @@
-"use client";
+"use client"
 
-import React, { Suspense } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 import { DecryptData } from "@/helpers/decryptTokenData"
 import { setAuth, setUserData } from "@/redux/slices/isAuthSlice"
 import { getCookie, hasCookie } from "cookies-next"
-import { CookiesProvider } from "react-cookie"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 
 import { SiteHeader } from "@/components/site-header"
 import make from "../lib/secure"
-import HeaderLoading from "./header-skelton"
 // import { StoreWrapper } from "../redux/store"
 import { SiteFooter1 } from "./site-footer"
 
@@ -45,11 +43,7 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      <Suspense fallback={<HeaderLoading />}>
-        <CookiesProvider>
-          <SiteHeader />
-        </CookiesProvider>
-      </Suspense>
+      <SiteHeader />
       <main>{children}</main>
       <SiteFooter1 />
     </>

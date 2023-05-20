@@ -8,7 +8,7 @@ import { setAuth } from "@/redux/slices/isAuthSlice"
 import { setLoader } from "@/redux/slices/loaderSlice"
 import { googleAuthUrl } from "@/services/oauth-google"
 import axios from "axios"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 
 // updated
 
@@ -53,9 +53,9 @@ export function UserAuthForm({
     password: "",
   })
 
-  let callbackURL
+  let callbackURL = "/"
   if (change.query) {
-    callbackURL = change.query.callbackURL
+    callbackURL = `${change.query.callbackURL}`
   }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -108,12 +108,17 @@ export function UserAuthForm({
   function handleChangeInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     setInputs({ ...inputs, [e.target.id]: e.target.value })
   }
-
+  function keyPress(e) {
+    if (e.key === "Escape") {
+      setLoader(false)
+    }
+  }
   function handleGoogleLogin() {
     dispatch(setLoader(true))
     let params = `status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=-1000,top=-1000`
     window.open(googleAuthUrl, "Happift Account Progress", params)
   }
+
   React.useEffect(() => {
     if (FormType === "signin") {
       if (inputs.email && inputs.password) {
@@ -127,11 +132,32 @@ export function UserAuthForm({
       setDisabled(true)
     }
   }, [FormType, inputs])
+  React.useEffect(() => {
+    let retry = true
+    if (retry) {
+      setInterval(() => {
+        const redirect = window.localStorage.getItem("redirect") || null
+        if (redirect) {
+          setLoader(false)
+          retry = false
+          router.push(callbackURL)
+          window.localStorage.removeItem("redirect")
+        }
+      }, 5000)
+    }
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLoader(false)
+      }
+    }
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
 
   return (
     <>
-      {/* {isLoading && <Spinner>Hold On...</Spinner>} */}
       <form
+        onKeyUpCapture={() => keyPress}
         onSubmit={(event) => onSubmit(event)}
         className={cn("grid gap-6 p-4", className)}
         {...props}

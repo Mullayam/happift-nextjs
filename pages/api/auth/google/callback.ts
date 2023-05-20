@@ -4,6 +4,8 @@ import { PrismaClient, ROLE } from "@prisma/client"
 import { setCookie } from "cookies-next"
 import jwt from "jsonwebtoken"
 
+import make from "@/lib/secure"
+
 const prisma = new PrismaClient()
 
 const { OAuth2Client } = require("google-auth-library")
@@ -61,23 +63,35 @@ export default async function handler(
         status: true,
       },
     })
-
+    const status = payload.email_verified ? "E_0x0045" : "G_0x0000"
     if (user) {
-      localStorage.setItem("rf[0]", JSON.stringify(payload))
-      localStorage.setItem("isNew", "false")
-      setCookie("access_token", tokenData.id_token, {
+      const AuthToken = jwt.sign(
+        {
+          id: user.id,
+          name: user.firstName,
+          email: user.email,
+          status,
+          role: user.role,
+        },
+        process.env.ENCRYPTION_KEY,
+        { expiresIn: "1h" }
+      )
+      setCookie("isNew", "true", {
         req,
         res,
         maxAge: 60 * 60 * 24,
+        path: "/",
+        domain: process.env.NEXT_PUBLIC_SITE_DOMAIN,
       })
+      const encryptData = await make.encrypt(AuthToken)
+      setCookie("access_token", encryptData, { req, res, maxAge: 60 * 60 * 24 })
 
       return res
         .writeHead(301, {
-          Location: "/user/my-account",
+          Location: "/user/redirecting",
         })
         .end()
     } else {
-      const status = payload.email_verified ? "E_0x0045" : "G_0x0000"
       const user = await prisma.users.create({
         data: {
           google_id: payload.sub,
@@ -119,7 +133,8 @@ export default async function handler(
         path: "/",
         domain: process.env.NEXT_PUBLIC_SITE_DOMAIN,
       })
-      setCookie("access_token", AuthToken, { req, res, maxAge: 60 * 60 * 24 })
+      const encryptData = await make.encrypt(AuthToken)
+      setCookie("access_token", encryptData, { req, res, maxAge: 60 * 60 * 24 })
 
       return res
         .writeHead(301, {
