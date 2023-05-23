@@ -26,8 +26,9 @@ export default function PrivacyPolicy() {
         <div className="mx-auto flex  justify-between px-4 ">
           <article className="format format-sm sm:format-base lg:format-lg format-blue dark:format-invert mx-auto w-2/3 ">
             <header className="not-format mb-4 justify-center  lg:mb-6">
-               <h1 className="mb-4 text-center text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-           Privacy Policy </h1>
+              <h1 className="mb-4 text-center text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                Privacy Policy{" "}
+              </h1>
             </header>
             <h2 className="mb-4 text-xl  leading-tight text-gray-900 dark:text-white lg:mb-6 lg:text-xl">
               Thank you for visiting Happift, a gift card website dedicated to
@@ -84,26 +85,29 @@ export default function PrivacyPolicy() {
               is completely secure.
             </p>
             <h4 className="mb-4 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-6 lg:text-xl">
-             Children&apos;s Privacy
+              Children&apos;s Privacy
             </h4>
             <p className="lead">
-           Our website is not intended for use by children under the age of 15. We do not knowingly collect personal information from children under the age of 15.
+              Our website is not intended for use by children under the age of
+              15. We do not knowingly collect personal information from children
+              under the age of 15.
             </p>
             <h4 className="mb-4 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-6 lg:text-xl">
-             Changes to this Privacy Policy
+              Changes to this Privacy Policy
             </h4>
             <p className="lead">
-           We may update this Privacy Policy from time to time. We will post the updated Privacy Policy on our website and will notify you of any material changes.
+              We may update this Privacy Policy from time to time. We will post
+              the updated Privacy Policy on our website and will notify you of
+              any material changes.
             </p>
 
-             <h4 className="mb-4 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-6 lg:text-xl">
-             If you have any questions or concerns about this Privacy Policy, please contact us at privacy@happift.com.
+            <h4 className="mb-4 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-6 lg:text-xl">
+              If you have any questions or concerns about this Privacy Policy,
+              please contact us at privacy@happift.com.
             </h4>
           </article>
         </div>
       </main>
-
-       
     </Layout>
   )
 }

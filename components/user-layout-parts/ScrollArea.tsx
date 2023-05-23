@@ -1,11 +1,14 @@
-import * as React from "react"
+import * as React from "react";
 
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
+
+
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+
 
 export function CustomScrollArea({ title = "", children }) {
   const classname = `h-[550px] w-full  rounded-md border`
-  console.log(classname)
+ 
   return (
     <ScrollArea className={classname}>
       <div className="p-4">

@@ -3,11 +3,13 @@
 import https from "https"
 import type { NextApiRequest, NextApiResponse } from "next"
 import PaytmChecksum from "@/services/paytm/PaytmChecksum"
-import { setCookie } from "cookies-next"
+import { PrismaClient } from "@prisma/client"
+import { hasCookie, removeCookies, setCookie } from "cookies-next"
 
 import { PaytmConfig } from "@/config/site"
 import make from "@/lib/secure"
 
+const prisma = new PrismaClient()
 type txnAmount = {
   value: string
   currency: string
@@ -39,15 +41,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const giftCardId = req.query.cvId
-
+  const giftCardId = req.query.cvId as string
+  const userId = req.query.userId as string
+  const orderId = "OID-" + new Date().getTime()
   var paytmParams: PaytmParamsBody = {}
-
+  if (hasCookie("rfclipro_")) {
+    removeCookies("rfclipro_")
+  }
   paytmParams.body = {
     requestType: "Payment",
     mid: PaytmConfig.mid,
     websiteName: PaytmConfig.website,
-    orderId: "OID-" + new Date().getTime(),
+    orderId,
     callbackUrl: PaytmConfig.callbackUrl,
     txnAmount: {
       value: `${req.query.amount}`,
@@ -58,6 +63,7 @@ export default async function handler(
       email: `${req.query.email}`,
     },
   }
+
   setCookie(
     "paymentResponse",
     make.encrypt({
@@ -65,6 +71,8 @@ export default async function handler(
       orderId: paytmParams.body.orderId,
       userInfo: paytmParams.body.userInfo,
       txnAmount: paytmParams.body.txnAmount,
+      userId,
+      giftCardId,
     }),
     {
       req,
@@ -80,6 +88,15 @@ export default async function handler(
     signature: checksum,
   }
   const post_data = JSON.stringify(paytmParams)
+
+  await prisma.payements.create({
+    data: {
+      orderId,
+      userId,
+      giftCardId,
+      status: "PENDING",
+    },
+  })
   const queryParams = `mid=${process.env.PAYTM_MERCHANT_ID}&orderId=${paytmParams.body.orderId}`
   const options = {
     hostname:

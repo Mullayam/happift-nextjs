@@ -1,18 +1,18 @@
 import React, { Suspense } from "react"
 import { DecryptData } from "@/helpers/decryptTokenData"
+import { AuthContextProvider, useAuth } from "@/hooks/useCustomHooks"
 import { setAuth, setUserData } from "@/redux/slices/isAuthSlice"
 import { getCookie, hasCookie } from "cookies-next"
 import { useDispatch } from "react-redux"
 
 import make from "@/lib/secure"
-// import { GetStaticProps, InferGetStaticPropsType } from "next"
-
-import { SiteFooter } from "@/components/site-footer"
+import { Spinner } from "@/components/spinner"
 import { RightClickMenu } from "@/components/user-layout-parts/ContextMenu"
 import UserLayoutSidebar from "@/components/user-layout-parts/sidebar"
 import UserLayoutLoading from "./loading"
 
 export default function UserLayout({ children }) {
+  const { loader } = useAuth()
   const dispatch = useDispatch()
   React.useEffect(() => {
     async function getToken() {
@@ -25,11 +25,12 @@ export default function UserLayout({ children }) {
       }
     }
     getToken()
-    // t()
   }, [])
   return (
     <>
+      {loader && <Spinner />}
       <UserLayoutSidebar />
+
       <RightClickMenu>
         <Suspense fallback={<UserLayoutLoading />}>{children}</Suspense>
       </RightClickMenu>

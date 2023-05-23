@@ -1,14 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head"
-import Link from "next/link"
 
-import { siteConfig } from "@/config/site"
 import MainSection from "@/components/MainSection"
+import BuySteps from "@/components/buy-steps"
+import { CodeBlockWrapper } from "@/components/code-block-wrapper"
 import { Layout } from "@/components/layout"
 import Team from "@/components/our-teams"
-import { SiteFooter1 } from "@/components/site-footer"
+import { PromoVideo } from "@/components/promo-video"
 import Testimonials from "@/components/testimonials"
-import { buttonVariants } from "@/components/ui/button"
 
 
 export default function IndexPage(props) {
@@ -34,7 +33,7 @@ export default function IndexPage(props) {
             <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
               Welcome to Happift
               <br className="hidden sm:inline" /> Buy & Sell Variety of Gift
-              Cards at the cheaper Rates
+              Cards at the lower Rates
             </h1>
             <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
               Don&apos;t miss out on savings when you shop on Amazon or
@@ -62,10 +61,10 @@ export default function IndexPage(props) {
               Cards
             </Link> */}
           </div>
-
-       
         </section>
       </section>
+
+      {/* <PromoVideo /> */}
       <MainSection />
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
@@ -121,7 +120,6 @@ export default function IndexPage(props) {
       <Team />
 
       <Testimonials />
-     
     </Layout>
   )
 }

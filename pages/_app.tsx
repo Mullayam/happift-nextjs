@@ -1,14 +1,14 @@
-import type { AppProps } from "next/app";
-import { Inter as FontSans } from "@next/font/google";
-import { ThemeProvider } from "next-themes";
-import { Provider } from "react-redux";
+import type { AppProps } from "next/app"
+import { Inter as FontSans } from "@next/font/google"
+import { ThemeProvider } from "next-themes"
+import { Provider } from "react-redux"
 
+import { Toaster } from "@/components/ui/toaster"
+import { store } from "../redux/store"
+import "@/styles/globals.css"
+import { AuthContextProvider } from "@/hooks/useCustomHooks"
 
-
-import { Toaster } from "@/components/ui/toaster";
-import { store } from "../redux/store";
-import "@/styles/globals.css";
-
+import { Spinner } from "@/components/spinner"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,7 +28,9 @@ export default function App({ Component, pageProps }) {
 
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Provider store={store}>
-          <Component {...pageProps} />
+          <AuthContextProvider>
+            <Component {...pageProps} />
+          </AuthContextProvider>
         </Provider>
       </ThemeProvider>
     </>

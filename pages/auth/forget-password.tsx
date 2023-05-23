@@ -5,25 +5,34 @@ import React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "@/hooks/use-toast"
+import { setLoader } from "@/redux/slices/loaderSlice"
+import { RootState } from "@/redux/store"
 import axios from "axios"
 import { ChevronLeft } from "lucide-react"
+import { useDispatch, useSelector } from "react-redux"
 
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
+import { Spinner } from "@/components/spinner"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function ForgetPassword(props) {
   const router = useRouter()
+  const { isLoading } = useSelector((state: RootState) => state.loader)
+  const dispatch = useDispatch()
   const [email, setEmail] = React.useState("")
   async function SendResetPasswordLinkHandler() {
+    dispatch(setLoader(true))
     const { data } = await axios.post("/api/auth/reset-password", { email })
     if (data.success) {
+      dispatch(setLoader(false))
       toast({
         title: "Check your email",
         description: data.message,
       })
       return router.push("/auth/login")
     } else {
+      dispatch(setLoader(false))
       return toast({
         title: "Something went wrong",
         description: data.message,
@@ -32,6 +41,7 @@ export default function ForgetPassword(props) {
   }
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
+      {isLoading && <Spinner />}
       <Link
         href="/auth/login"
         className={cn(

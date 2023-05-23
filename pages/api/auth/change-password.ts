@@ -1,4 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next";
+import { SendEmail } from "@/services/mail"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcrypt"
 
@@ -36,10 +37,17 @@ export default async function handler(
         expiresAt: Date.now().toString(),
       },
     })
-    return res.status(200).json({
+
+    res.status(200).json({
       success: true,
       message: "Passwords has been Changed successfully",
     })
+    return await SendEmail(
+      req.body.email,
+      "Password Changed",
+      "Your Password has been Changed successfully",
+      ""
+    )
   } catch (error: any) {
     console.log(error)
     return res.status(200).json({

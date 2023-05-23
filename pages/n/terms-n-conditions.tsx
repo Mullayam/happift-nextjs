@@ -38,24 +38,32 @@ export default function Terms(props) {
                 Terms and Conditions of Use:
               </h2>
               <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
-               Agreement to Terms and Conditions of Use
+                Agreement to Terms and Conditions of Use
               </h4>
               <p className="lead">
-               By using our website, you agree to be bound by these Terms and Conditions of Use. If you do not agree to these terms, you should not use our website.
+                By using our website, you agree to be bound by these Terms and
+                Conditions of Use. If you do not agree to these terms, you
+                should not use our website.
               </p>
               <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
-              Eligibility
+                Eligibility
               </h4>
               <p className="lead">
-             Our website is intended for use by individuals who are 15 years of age or older and who are residents of India. By using our website, you represent and warrant that you meet these eligibility requirements.
+                Our website is intended for use by individuals who are 15 years
+                of age or older and who are residents of India. By using our
+                website, you represent and warrant that you meet these
+                eligibility requirements.
               </p>
               <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
-              Use of the Website
+                Use of the Website
               </h4>
               <p className="lead">
-             You may use our website only for lawful purposes and in accordance with these Terms and Conditions of Use. You may not use our website in any way that violates any applicable law or regulation.
+                You may use our website only for lawful purposes and in
+                accordance with these Terms and Conditions of Use. You may not
+                use our website in any way that violates any applicable law or
+                regulation.
               </p>
-             
+
               <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
                 General Terms
               </h4>
@@ -157,24 +165,32 @@ export default function Terms(props) {
                 claims, damages, or expenses arising out of your use of our
                 website or any gift cards purchased through our website.
               </p>
-               <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
+              <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
                 Governing Law and Jurisdiction
               </h4>
               <p className="lead">
-              These Terms and Conditions of Use shall be governed by and construed in accordance with the laws of India. Any dispute arising out of or in connection with these terms shall be resolved exclusively in the courts located in India.
+                These Terms and Conditions of Use shall be governed by and
+                construed in accordance with the laws of India. Any dispute
+                arising out of or in connection with these terms shall be
+                resolved exclusively in the courts located in India.
               </p>
-               <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
+              <h4 className="mb-2 mt-2 text-xl font-bold leading-tight text-gray-900 dark:text-white lg:mb-2 lg:text-2xl">
                 Changes to Terms and Conditions of Use
               </h4>
               <p className="lead">
-               We may revise these Terms and Conditions of Use at any time and without notice. By using our website, you agree to be bound by the current version of these Terms and Conditions of Use.
-              </p><br></br>
-              <p>If you have any questions or concerns about these Terms and Conditions of Use, please contact us at support@happift.com.</p>
+                We may revise these Terms and Conditions of Use at any time and
+                without notice. By using our website, you agree to be bound by
+                the current version of these Terms and Conditions of Use.
+              </p>
+              <br></br>
+              <p>
+                If you have any questions or concerns about these Terms and
+                Conditions of Use, please contact us at support@happift.com.
+              </p>
             </article>
           </div>
         </main>
       </section>
-    
     </Layout>
   )
 }

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
 import { HYDRATE } from "next-redux-wrapper"
 
 import { AuthenticationDataType } from "../../types/userAuth"

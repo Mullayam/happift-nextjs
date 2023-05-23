@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "../ui/button"
 import AccountForm from "./AccountForm"
+import KYCDocsForm from "./KYC-DocsForm"
 import { Nofitfy } from "./NofitficaitonTab"
 import TabsCard from "./TabsCard"
 
@@ -44,30 +45,11 @@ export function CustomTab() {
         </TabsCard>
       </TabsContent>
       <TabsContent className="h-[500px]" value="security">
-        <TabsCard header={"Security"} button={false}>
-          None
-        </TabsCard>
+        <TabsCard header={"Security"}>None</TabsCard>
       </TabsContent>
       <TabsContent className="h-[500px]" value="kyc">
-        <TabsCard header={"KYX"} button={true}>
-          <div>
-            <div className="mb-4 grid w-full max-w-sm items-center gap-4">
-              <Label htmlFor="picture">ID PROOF</Label>
-              <Input id="picture" type="file" accept="image/*" />
-            </div>
-            <div className="mb-4 grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="picture">PAN CARD</Label>
-              <Input id="picture" type="file" accept="image/*" />
-            </div>
-            <div className="mb-4 grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="picture">SELFIE</Label>
-              <Input id="picture" type="file" accept="image/*" />
-              <small className="text-red-500">
-                {" "}
-                Take Selfie with Pan Card in Hand
-              </small>
-            </div>
-          </div>
+        <TabsCard header={"KYC Documents"}>
+          <KYCDocsForm />
         </TabsCard>
       </TabsContent>
     </Tabs>

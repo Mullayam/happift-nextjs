@@ -17,9 +17,7 @@ export default function LoginPage() {
       >
         Login
       </Link>
-      <div className="hidden h-full bg-slate-100 lg:block">
-        
-      </div>
+      <div className="hidden h-full bg-slate-100 lg:block"></div>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[320px]">
         <div className="flex flex-col text-center">
           <Icons.logo className="mx-auto mb-4 h-12 w-12" />
@@ -32,7 +30,7 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-        <UserAuthForm type="signup"/>
+        <UserAuthForm type="signup" />
         <p className="px-8 text-center text-sm text-slate-600">
           By clicking continue, you agree to our{" "}
           <Link className="underline" href="/n/terms-n-conditions">

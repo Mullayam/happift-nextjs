@@ -3,8 +3,7 @@ import Head from "next/head"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import UserLayout from "./layout";
-
+import UserLayout from "./layout"
 
 export default function AccountSettings(props) {
   return (

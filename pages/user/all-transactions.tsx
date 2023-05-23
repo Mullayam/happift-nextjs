@@ -28,12 +28,12 @@ export default function AccountSettings(props) {
           <div className="mb-4 h-fit items-center justify-center rounded bg-gray-50 p-10 dark:bg-gray-800">
             <div className="mb-8 flex h-10 justify-end rounded bg-gray-50 dark:bg-gray-800">
               <div className="mx-2 flex flex-row gap-4">
-                <PlusCircle />
+                {/* <PlusCircle />
                 <PrinterIcon />
-                <FileText />
+                <FileText /> */}
               </div>
             </div>
-            <Tabs defaultValue="account" className="w-full">
+            <Tabs defaultValue="all" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="all">All Transactions</TabsTrigger>
                 <TabsTrigger value="inlet">Made By You</TabsTrigger>

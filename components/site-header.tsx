@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import Link from "next/link"
 import { RootState } from "@/redux/store"
 import { useSelector } from "react-redux"
@@ -38,7 +38,6 @@ export function SiteHeader() {
             </Link> */}
             <ThemeToggle />
             {isAuth ? (
-              
               <UserDropdownMenu />
             ) : (
               <Link

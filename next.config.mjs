@@ -8,6 +8,7 @@ const nextConfig = {
       "images.unsplash.com",
       "icons8.com",
       "az15297.vo.msecnd.net",
+      "media.publit.io",
     ],
   },
   experimental: {

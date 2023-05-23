@@ -1,12 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import https from "https"
-import type { NextApiRequest, NextApiResponse } from "next"
+import https from "https";
+import type { NextApiRequest, NextApiResponse } from "next";
 import PaytmChecksum from "@/services/paytm/PaytmChecksum"
-import { getCookie, hasCookie } from "cookies-next"
+import { Prisma, PrismaClient } from "@prisma/client"
 
 import { responseBody } from "@/types/txnStatus"
-import make from "@/lib/secure"
+
+const prisma = new PrismaClient()
 
 type Data = {
   body: any
@@ -53,13 +54,30 @@ export default async function handler(
   }
   // Set up the request
   var response: responseBody
-
+  let status
   var post_req = https.request(options, function (post_res) {
     post_res.on("data", function (chunk) {
       response = JSON.parse(chunk)
     })
-    post_res.on("end", function () {
-      // insert to the database   console.log(response.body)
+    post_res.on("end", async function () {
+      if (response.body.resultInfo.resultCode === "01") {
+        status = "SUCCESS"
+      } else {
+        status = response.body.resultInfo.resultStatus.split("_")[1]
+      }
+      await prisma.payements.updateMany({
+        where: {
+          AND: [
+            { userId: decodedData.userId },
+            { giftCardId: decodedData.giftCardId },
+          ],
+        },
+
+        data: {
+          paymentDetails: response.body,
+          status,
+        },
+      })
       res.status(200).json({ body: response.body })
       res.end()
     })

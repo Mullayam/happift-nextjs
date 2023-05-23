@@ -1,7 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next"
+import { SendEmail } from "@/services/mail"
 import { PrismaClient } from "@prisma/client"
 
-import { SendEmail, generateToken } from "../../../helpers/functions"
+import { generateToken } from "../../../helpers/functions"
 
 const primsa = new PrismaClient()
 

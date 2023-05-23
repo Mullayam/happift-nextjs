@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
+import * as React from "react"
+import { useRouter } from "next/navigation"
 import { useRouter as Redirecting } from "next/router"
 import { toast } from "@/hooks/use-toast"
 import { setAuth } from "@/redux/slices/isAuthSlice"
@@ -67,6 +67,7 @@ export function UserAuthForm({
     dispatch(setLoader(true))
     await new Promise((resolve) => setTimeout(resolve, 1000))
     FormType === "signin" ? await LoginHandle() : await SignUpHandle()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     dispatch(setLoader(false))
   }
   async function LoginHandle() {
@@ -93,6 +94,7 @@ export function UserAuthForm({
   async function SignUpHandle() {
     const { data } = await axios.post("/api/auth/new", inputs)
     if (data.success) {
+      router.push(callbackURL)
       return toast({
         title: "Redirecting...",
         description: data.message,
@@ -219,17 +221,21 @@ export function UserAuthForm({
           </Button>
         </div>
       </form>
-      <Separator />
-      <div className="grid gap-6 p-4">
-        <Button
-          onClick={handleGoogleLogin}
-          disabled={isLoading}
-          variant="outline"
-        >
-          <Icons.google className="mr-2 h-5 w-5 " />
-          Continue with Google
-        </Button>
-      </div>
+      {FormType === "signin" ? (
+        <>
+          <Separator />
+          <div className="grid gap-6 p-4">
+            <Button
+              onClick={handleGoogleLogin}
+              disabled={isLoading}
+              variant="outline"
+            >
+              <Icons.google className="mr-2 h-5 w-5 " />
+              Continue with Google
+            </Button>
+          </div>
+        </>
+      ) : null}
     </>
   )
 }

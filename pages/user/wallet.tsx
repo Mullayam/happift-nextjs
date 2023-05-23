@@ -51,7 +51,10 @@ export default function AccountSettings(props) {
             </div>
           </div> */}
           <div className="mb-4 flex h-48 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-            <h1 className="animate-pulse text-4xl font-semibold   text-gray-400 dark:text-gray-500"> Cooming Soon</h1>
+            <h1 className="animate-pulse text-4xl font-semibold   text-gray-400 dark:text-gray-500">
+              {" "}
+              Cooming Soon
+            </h1>
           </div>
           {/* <div className="grid grid-cols-2 gap-4">
             <div className="flex h-28 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">

@@ -50,7 +50,8 @@ export default async function handler(
     const JWTToken = jwt.sign(
       {
         _id: User.id,
-        name: User.firstName + " " + User.lastName,
+        firstName: User.firstName,
+        lastName: User.lastName,
         avatar: User.avatar,
         email: User.email,
         role: User.role,
@@ -74,9 +75,6 @@ export default async function handler(
       .status(200)
       .json({ success: true, message: "Logged in successfully 😊 👌" })
   } catch (error: any) {
-    return res.send({
-      success: false,
-      message: error.message,
-    })
+    return res.status(200).json({ success: false, message: error.message })
   }
 }

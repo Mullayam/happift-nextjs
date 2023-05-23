@@ -1,3 +1,4 @@
+import Link from "next/link"
 import {
   ChevronRight,
   Cloud,
@@ -32,6 +33,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+const Menu = [
+  {
+    label: "Dashboard",
+    link: "/user/dashboard",
+  },
+  {
+    label: "Add New Card",
+    link: "./manage-cards/add-new-card",
+  },
+
+  {
+    label: "Edit Card",
+    link: "./manage-cards/edit-card",
+  },
+  {
+    label: "Listed Cards",
+    link: "./manage-cards/listed-cards",
+  },
+  {
+    label: "All Payments",
+    link: "./manage-cards/all-payments",
+  },
+]
 export function ManageCardsDropdownMenu() {
   return (
     <DropdownMenu>
@@ -42,9 +66,13 @@ export function ManageCardsDropdownMenu() {
         <DropdownMenuLabel>Admin Panel</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Profile</span>
-          </DropdownMenuItem>
+          {Menu.map((menu) => {
+            return (
+              <DropdownMenuItem key={menu.label}>
+                <Link href={menu.link}>{menu.label}</Link>
+              </DropdownMenuItem>
+            )
+          })}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

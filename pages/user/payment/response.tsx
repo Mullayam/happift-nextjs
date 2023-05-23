@@ -1,13 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react"
 import { InferGetServerSidePropsType } from "next"
+import { useRouter } from "next/navigation"
 import { retriveCookie } from "@/helpers/functions"
 import { toast } from "@/hooks/use-toast"
 import axios from "axios"
+import { hasCookie } from "cookies-next"
+
+
 
 import { responseBody } from "@/types/txnStatus"
 import make from "@/lib/secure"
 import { Spinner } from "@/components/spinner"
+
 
 type MyCookie = {
   cookieName?: string
@@ -18,7 +23,7 @@ const PaymentResponse = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const { cookieName, value }: MyCookie = props.myCookie
-
+  const router = useRouter()
   let decodedData = make.decrypt(decodeURIComponent(value))
   const [whatToDo, setwhatToDo] = React.useState(props.response)
   const [txnStatus, setTxnStatus] = React.useState<responseBody>({
@@ -48,13 +53,21 @@ const PaymentResponse = (
     } else {
       setwhatToDo("fulfilled")
       return toast({
-        title: data.body.resultStatus,
-        description: data.body.resultMsg,
+        title: "Transaction Failed",
       })
     }
   }
   React.useEffect(() => {
     VerifyTXN()
+    let retry = true
+    setTimeout(() => {
+      if (retry) {
+        if (!hasCookie(cookieName)) {
+          router.push("/user/my-account")
+          retry = false
+        }
+      }
+    }, 2000)
   }, [])
 
   return (
@@ -386,6 +399,7 @@ const PaymentResponse = (
 export default PaymentResponse
 export async function getServerSideProps(context) {
   let getNamedCookie
+  console.log(context.res.body)
   if (context.req.headers.cookie) {
     getNamedCookie =
       (await retriveCookie(context.req.headers.cookie.split(";"))) || undefined

@@ -1,12 +1,14 @@
-import Image from "next/image";
-import Hapiift from "@/public/fullLogo.png";
-import GoogleImg from "@/public/google.png";
-import Logo from "@/public/logo3.png";
-import { Laptop, Moon, SunMedium, Twitter, type Icon as LucideIcon } from "lucide-react";
-
-
-
-
+import Image from "next/image"
+import Hapiift from "@/public/fullLogo.png"
+import GoogleImg from "@/public/google.png"
+import Logo from "@/public/logo3.png"
+import {
+  Laptop,
+  Moon,
+  SunMedium,
+  Twitter,
+  type Icon as LucideIcon,
+} from "lucide-react"
 
 export type Icon = LucideIcon
 

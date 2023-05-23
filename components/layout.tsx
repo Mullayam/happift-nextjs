@@ -1,16 +1,19 @@
-"use client"
+"use client";
 
-import React from "react"
-import { useRouter } from "next/router"
+import React from "react";
+import { useRouter } from "next/router";
 import { DecryptData } from "@/helpers/decryptTokenData"
+import { useAuth } from "@/hooks/useCustomHooks"
 import { setAuth, setUserData } from "@/redux/slices/isAuthSlice"
+import { RootState } from "@/redux/store"
 import { getCookie, hasCookie } from "cookies-next"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import { SiteHeader } from "@/components/site-header"
 import make from "../lib/secure"
 // import { StoreWrapper } from "../redux/store"
 import { SiteFooter1 } from "./site-footer"
+import { Spinner } from "./spinner"
 
 interface LayoutProps {
   children: React.ReactNode
@@ -18,6 +21,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const dispatch = useDispatch()
+  const { loader } = useAuth()
   const router = useRouter()
   async function t() {
     router.push({
@@ -37,12 +41,13 @@ export function Layout({ children }: LayoutProps) {
         dispatch(setUserData(payload))
       }
     }
+
     getToken()
-    // t()
   }, [])
 
   return (
     <>
+      {loader && <Spinner />}
       <SiteHeader />
       <main>{children}</main>
       <SiteFooter1 />

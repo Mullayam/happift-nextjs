@@ -1,3 +1,10 @@
+import { useEffect, useState } from "react"
+import { delay } from "@/helpers/functions"
+import { useAuth } from "@/hooks/useCustomHooks"
+import axios from "axios"
+import { MoreHorizontalIcon, Verified } from "lucide-react"
+import moment from "moment"
+
 import {
   Table,
   TableBody,
@@ -8,65 +15,23 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Icons } from "../icons"
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV008",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-]
+import { Badge } from "../ui/badge"
+import { PaymentPreview } from "./PaymentPreview"
 
 export function TransactionsTable() {
+  const [responseData, setResponsData] = useState([])
+  const { loader, setLoader } = useAuth()
+  async function getTransactionRecords() {
+    const { data } = await axios.get("/api/v1/payment/all-txn")
+    setResponsData(data.content)
+    await delay(1500)
+    setLoader(false)
+  }
+  useEffect(() => {
+    setLoader(true)
+    getTransactionRecords()
+  }, [])
+
   return (
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
@@ -76,23 +41,48 @@ export function TransactionsTable() {
           <TableHead>Status</TableHead>
           <TableHead>Method</TableHead>
           <TableHead>Order Id</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-right">Date</TableHead>
+          <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>
-              <Icons.badge className={"bg-amber-100"}>
-                {invoice.paymentStatus}
-              </Icons.badge>
-            </TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-          </TableRow>
-        ))}
+        {!loader &&
+          responseData.map((details, i) => (
+            <TableRow key={details.orderId}>
+              <TableCell className="font-medium">#INV00{i + 1}</TableCell>
+              <TableCell>
+                <Icons.badge
+                  className={
+                    details.status === "SUCCESS"
+                      ? "bg-green-200 text-green-800"
+                      : "bg-amber-200 text-red-800"
+                  }
+                >
+                  {details.status}{" "}
+                  {details.status === "SUCCESS" ? <Verified size={18} /> : null}
+                </Icons.badge>
+              </TableCell>
+              <TableCell>
+                <Icons.paytm />
+              </TableCell>
+              <TableCell>{details.orderId}</TableCell>
+              <TableCell className="text-right">
+                {moment(details.createdAt)
+                  .utcOffset("+0530")
+                  .format("YYYY/MM/DD HH:mm a")}
+              </TableCell>
+              <TableCell className="text-right">
+                <Badge
+                  variant="destructive"
+                  className="cursor-pointer bg-stone-200 dark:bg-sky-200 dark:text-stone-800"
+                >
+                  <PaymentPreview responseData={details.paymentDetails}>
+                    <MoreHorizontalIcon />
+                  </PaymentPreview>
+                </Badge>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   )

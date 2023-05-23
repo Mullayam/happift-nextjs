@@ -1,21 +1,38 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 type Data = {
-  name: string
+  success: boolean
+  message: any
+  content?: any
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>
+  res: NextApiResponse<Data>
 ) {
-  res.status(200).json({
-    cardName: "Amazon Gift Card",
-    image:
-      "https://az15297.vo.msecnd.net/images/rewards/rc/medium/AmazonPayIN_262x164.png",
-    stockAvailable: 4,
-    basePrice: 225,
-    cardWorth: 250,
-    availableCard: ["100", "250", "500", "1000"],
-  })
+  try {
+    const AllCards = await prisma.giftCards.findMany({
+      select: {
+        id: true,
+        cardName: true,
+        image: true,
+        stock: true,
+        buyPrice: true,
+        worth: true,
+      },
+    })
+    return res.status(200).json({
+      success: true,
+      message: " ",
+      content: {
+        AllCards,
+        availableCard: ["100", "250", "500", "1000"],
+      },
+    })
+  } catch (error) {
+    return res.status(200).json({ success: false, message: error.message })
+  }
 }

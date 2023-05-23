@@ -1,11 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import Head from "next/head";
-
-
+import Head from "next/head"
 
 import { CustomScrollArea } from "@/components/user-layout-parts/ScrollArea"
 import UserLayout from "./layout"
-
 
 export default function AccountSettings(props) {
   const lsitings = false
@@ -97,9 +94,13 @@ export default function AccountSettings(props) {
                   </div>
                 </div>
               </CustomScrollArea>
-            ): <div className="mb-4 flex h-48 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-            <p className="text-2xl text-gray-400 dark:text-white">You have No Listing yet </p>
-          </div>}
+            ) : (
+              <div className="mb-4 flex h-48 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+                <p className="text-2xl text-gray-400 dark:text-white">
+                  You have No Listing yet{" "}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* <div className="mb-4 grid grid-cols-2 gap-4">

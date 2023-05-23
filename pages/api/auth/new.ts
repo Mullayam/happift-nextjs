@@ -1,13 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
-import { setCookie } from "cookies-next";
-import jwt from "jsonwebtoken";
-import validator from "validator";
-
-
-
-
+import type { NextApiRequest, NextApiResponse } from "next"
+import { PrismaClient } from "@prisma/client"
+import bcrypt from "bcrypt"
+import { setCookie } from "cookies-next"
+import jwt from "jsonwebtoken"
+import validator from "validator"
 
 const prisma = new PrismaClient()
 
@@ -88,9 +84,6 @@ export default async function handler(
       message: "Account Created Successfuly.",
     })
   } catch (error) {
-    return res.send({
-      success: false,
-      message: error.message,
-    })
+    return res.status(200).json({ success: false, message: error.message })
   }
 }

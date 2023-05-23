@@ -14,10 +14,10 @@ import { Label } from "@/components/ui/label"
 
 export type TabsContent = {
   header?: string
-  button?: boolean
+
   children?: ReactNode
 }
-export default function TabsCard({ header, children, button }: TabsContent) {
+export default function TabsCard({ header, children }: TabsContent) {
   return (
     <Card className="border-none">
       <CardHeader>
@@ -39,11 +39,6 @@ export default function TabsCard({ header, children, button }: TabsContent) {
           </>
         )}
       </CardContent>
-      {children && button && (
-        <CardFooter>
-          <Button>Save changes</Button>
-        </CardFooter>
-      )}
     </Card>
   )
 }

@@ -30,7 +30,7 @@ export default function UserLayoutNavbar() {
           <div className="flex items-center">
             <button className="mr-2 inline-block rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[2px] hover:text-white focus:outline-none focus:ring active:text-opacity-75">
               <span className="block rounded-full bg-transparent px-6 py-2 text-sm font-medium hover:bg-transparent">
-                {auth.data?.name}
+                {auth.data?.firstName}
               </span>
             </button>
 

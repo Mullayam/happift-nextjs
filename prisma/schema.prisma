@@ -11,23 +11,24 @@ datasource db {
 }
 
 model Users {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  google_id   String?     @default("")
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  google_id   String?       @default("")
   firstName   String
-  lastName    String?     @default("")
-  phone       String?     @default("")
-  email       String      @unique
+  lastName    String?       @default("")
+  phone       String?       @default("")
+  email       String        @unique
   password    String
-  avatar      String?     @default("")
-  role        ROLE        @default(F_3026)
-  permissions PERMISSIONS @default(B_555)
-  status      STATUS      @default(G_0x0000)
+  avatar      String?       @default("")
+  role        ROLE          @default(F_3026)
+  permissions PERMISSIONS   @default(B_555)
+  status      STATUS        @default(G_0x0000)
   tokens      Tokens[]
-  orders      Orders[]
   payements   Payements[]
+  kycDocs     KycDocs?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ListedCards ListedCards[]
 }
 
 model Tokens {
@@ -67,6 +68,15 @@ enum STATUS {
   F_0x0002
 }
 
+enum PaymentStatus {
+  PENDING
+  DECLINED
+  VERIFIED
+  FAILURE
+  SUCCESS
+  PAID
+}
+
 model Support {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   fullName String
@@ -81,13 +91,14 @@ model GiftCards {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   cardName    String
   image       String
-  stock       Int
+  stock       String
   isAvailable Boolean
-  worth       Int
-  buyPrice    Int
+  worth       String
+  buyPrice    String
+  cardDetails String
   categoryId  Categories[]
-  orders      Orders[]
-  Payements   Payements[]
+
+  Payements Payements[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -100,14 +111,21 @@ model Categories {
   giftCards   GiftCards @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
-model Orders {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  giftcardName String
-  giftcardId   String      @db.ObjectId
-  giftCards    GiftCards   @relation(fields: [giftcardId], references: [id], onDelete: Cascade)
-  userId       String      @db.ObjectId
-  user         Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  payements    Payements[]
+model ListedCards {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  listingId      String
+  orderId        String
+  cardName       String
+  cardType       String
+  expiryDate     String
+  balance        String
+  payout         String
+  voucherCode    String?
+  voucherPin     String?
+  voucherDetails String
+  status         PaymentStatus
+  userId         String        @db.ObjectId
+  User           Users         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -116,14 +134,28 @@ model Orders {
 model Payements {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  orderId String @db.ObjectId
-  order   Orders @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId        String
+  paymentDetails Json?
 
-  userId     String    @db.ObjectId
-  User       Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  giftcardId String    @db.ObjectId
-  giftCards  GiftCards @relation(fields: [giftcardId], references: [id], onDelete: Cascade)
+  userId     String        @db.ObjectId
+  User       Users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  giftCardId String        @db.ObjectId
+  giftCards  GiftCards     @relation(fields: [giftCardId], references: [id], onDelete: Cascade)
+  status     PaymentStatus
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model KycDocs {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id_proof String
+  pancard  String
+  selfie   String
+  userId   String @db.ObjectId  
+  User     Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  status    PaymentStatus
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  @@unique([userId])
 }

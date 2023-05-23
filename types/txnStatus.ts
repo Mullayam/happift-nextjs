@@ -13,7 +13,7 @@ export type responseBody = {
     txnType?: string
     gatewayName?: string
     bankName?: string
-    mid?: "xxxxxxxxxxxxxxxxxxxx"
+    mid?: string
     paymentMode?: string
     refundAmt?: string
     txnDate?: string

@@ -1,198 +1,236 @@
 /* eslint-disable @next/next/no-img-element */
-"use client"
 
-import React from "react"
+import { url } from "inspector"
+import React, { useState } from "react"
 import { InferGetServerSidePropsType } from "next"
+import Head from "next/head"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
-import Paytm from "@/public/Paytm_Logo.jpg"
+import { useRouter } from "next/router"
+import { delay } from "@/helpers/functions"
+import { toast } from "@/hooks/use-toast"
+import { useAuth } from "@/hooks/useCustomHooks"
 import { RootState } from "@/redux/store"
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import axios from "axios"
+import { setCookie } from "cookies-next"
 import { useSelector } from "react-redux"
 
+import make from "@/lib/secure"
+import SideAlert from "@/components/SideAlert"
 import { Icons } from "@/components/icons"
 import { Layout } from "@/components/layout"
 
 export default function OrderProcess(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) {
-  const router = useRouter()
   const { data } = useSelector((state: RootState) => state.auth)
-
-  function handlePlaceOrder() {
-    router.push(
-      "/api/v1/payment/initiate-transaction?cvId=" +
-        props.giftCardId?.giftCardId
-    )
+  const router = useRouter()
+  const [value, setValue] = useState(100)
+  const { giftCardId } = router.query
+   
+  const [showSelectedCard, setShowSelectedCard] = useState(false)
+  const [quantity, setQuantity] = useState<string | number>("1")
+  const [responseData, setResponseData] = useState<any>({})
+  function handleClickChange(price) {
+    setValue(price)
+    setShowSelectedCard(true)
   }
+  const { setLoader, setExtraData } = useAuth()
+  async function handleSubmitCard() {
+    setLoader(true)
+
+    if (quantity > responseData?.stockAvailable) {
+      const remove = +quantity - responseData?.stockAvailable
+
+      return toast({
+        title: "Over Quantity",
+        description: ` You have choosen ${quantity} cards, but ${responseData?.stockAvailable} only available, Please remove ${remove}`,
+        variant: "destructive",
+      })
+    }
+    const orderData = {
+      basePrice: value,
+      cardName: responseData?.AllCards.cardName,
+      image: responseData?.AllCards.image,
+      amount: (value * 90) / 100,
+      quantity,
+      cvId: giftCardId,
+      email: data.email,
+    }
+    setExtraData(orderData)
+    await setCookie("rfclipro_", make.encrypt(orderData))
+    router.push({
+      pathname: `/user/payment/${giftCardId}/confirm-purchase`,
+    })
+    setLoader(false)
+  }
+
+  React.useEffect(() => {
+    setResponseData(props.responseData)
+  }, [value])
+
   return (
     <Layout>
-      <div className="flex flex-col items-center border-b bg-white py-4 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
-        <a href="/nn/gift-cards" className="text-2xl font-bold text-gray-800">
-          <ChevronLeftIcon />
-        </a>
-        <div className="mt-4 py-2 text-xs sm:ml-auto sm:mt-0 sm:text-base">
-          <div className="relative">
-            <ul className="relative flex w-full items-center justify-between space-x-2 sm:space-x-4">
-              <li className="flex items-center space-x-3 text-left sm:space-x-4">
-                <a
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-200 text-xs font-semibold text-emerald-700"
-                  href="#"
-                >
-                  <Icons.success />
-                </a>
-                <span className="font-semibold text-gray-900">Processing</span>
-              </li>
-              <ChevronRightIcon />
-              <li className="flex items-center space-x-3 text-left sm:space-x-4">
-                <a
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2"
-                  href="#"
-                >
-                  2
-                </a>
-                <span className="font-semibold text-gray-900">Confimation</span>
-              </li>
-              <ChevronRightIcon />
-              <li className="flex items-center space-x-3 text-left sm:space-x-4">
-                <a
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 text-xs font-semibold text-white"
-                  href="#"
-                >
-                  3
-                </a>
-                <span className="font-semibold text-gray-500">Payment</span>
-              </li>
-            </ul>
-          </div>
+      <Head>
+        <title>Select Reward Worth - Happift</title>
+        <meta
+          name="description"
+          content="Happift Sell and Buy your Gift Voucher "
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Sell Gift Cards, Amazon Gift Card: Happift"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {showSelectedCard && (
+        <SideAlert
+          text={`Rs.${value} Gift Cart Selected`}
+          button={true}
+          handleClickChange={() => setShowSelectedCard(false)}
+        />
+      )}
+      <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+        <div className="flex max-w-[980px] flex-col items-start gap-2">
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
+            Process Order
+          </h1>
         </div>
-      </div>
-
-      <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-        <div className="px-4 pt-8">
-          <p className="text-xl font-medium">Order Summary</p>
-          <p className="text-gray-400">
-            Check your items. And select a suitable shipping method.
-          </p>
-          <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-            {/* cards descriptons */}
-            <div className="flex flex-col rounded-lg bg-white sm:flex-row">
-              <img
-                className="m-2 h-24 w-28 rounded-md border object-cover object-center"
-                src="https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                alt=""
-              />
-              <div className="flex w-full flex-col p-4">
-                <span className="font-semibold">Amazon Gift </span>
-                <span className="float-right text-gray-400">
-                  Worth Price : 250
-                </span>
-                <p className="text-lg font-bold">Buy Price : 225</p>
-              </div>
-            </div>
-          </div>
-
-          <p className="mt-8 text-lg font-medium">Payment Methods</p>
-          <div className="relative mt-4">
-            <input
-              className="peer hidden"
-              id="radio_2"
-              type="radio"
-              name="radio"
-              defaultChecked={true}
-            />
-            <span className="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-700"></span>
-            <label
-              className="flex cursor-pointer select-none rounded-lg border border-gray-300 p-4 peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50"
-              htmlFor="radio_2"
-            >
-              <Image className="w-24 object-contain" src={Paytm} alt="" />
-              <div className="ml-5">
-                <span className="mt-2 font-semibold">PayTM</span>
-                <p className="text-sm leading-6 text-slate-500">
-                  Delivery: Email/Instant
-                </p>
-              </div>
-            </label>
-          </div>
-        </div>
-        <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-          <p className="text-xl font-medium">Payment Details</p>
-          <p className="text-gray-400">
-            Complete your order by providing your payment details.
-          </p>
-          <div className="">
-            <label
-              htmlFor="email"
-              className="mb-2 mt-4 block text-sm font-medium"
-            >
-              Email
-            </label>
-
-            <div className="relative">
-              <input
-                type="text"
-                id="card-holder"
-                name="card-holder"
-                className="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm   shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                defaultValue={data?.email}
-                disabled={true}
-              />
-              <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"
+        <div className="mx-auto max-w-screen-xl px-4 py-8 text-center lg:px-12 lg:py-16">
+          <h2 className="m-2 mb-5">Choose Worth of Gift Card </h2>
+          <fieldset className="flex flex-wrap gap-3">
+            {responseData?.availableCard?.map((val) => {
+              return (
+                <div key={val}>
+                  <input
+                    type="radio"
+                    name="three"
+                    disabled={true}
+                    className="peer hidden [&:checked_+_label_svg]:block"
+                    defaultChecked={val === 500}
                   />
-                </svg>
-              </div>
-            </div>
 
-            <div className="mt-6 border-y py-2">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">Subtotal</p>
-                <p className="font-semibold text-indigo-900">Rs. 250.00</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">Charges</p>
-                <p className="font-semibold text-green-700">Rs 00.00</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-900">Discount</p>
-                <p className="font-semibold text-red-400"> - Rs 25.00</p>
-              </div>
+                  <label
+                    htmlFor="ColorBlack"
+                    className={`flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-100  ${
+                      val === value ? "bg-blue-500 text-white" : "bg-white"
+                    } px-3 py-2 text-gray-900 hover:border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-checked:text-white`}
+                  >
+                    <svg
+                      className="hidden h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+
+                    <p
+                      className="text-sm font-medium"
+                      onClick={() => handleClickChange(val)}
+                    >
+                      Rs.{val}
+                    </p>
+                  </label>
+                </div>
+              )
+            })}
+          </fieldset>
+          {showSelectedCard && (
+            <div className="flex w-fit">
+              <section>
+                <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+                  <div className="mx-auto max-w-3xl border-solid border-red-400 shadow-amber-500">
+                    <header className="text-center">
+                      <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+                        Selected Card
+                      </h1>
+                    </header>
+
+                    <div className="mt-8">
+                      <ul className="space-y-4">
+                        <li className="flex items-center gap-4">
+                          <img
+                            src={responseData?.AllCards.image}
+                            alt={responseData?.AllCards.cardName}
+                            className="h-24 w-fit rounded object-cover"
+                          />
+
+                          <div>
+                            <h3 className="text-sm text-gray-900">
+                              {responseData?.AllCards.cardName}
+                            </h3>
+                            <dd>Rs. {value}</dd>
+                          </div>
+
+                          <div className="flex flex-1 items-center justify-end gap-2">
+                            <form>
+                              <label htmlFor="Line1Qty" className="sr-only">
+                                {" "}
+                                Quantity{" "}
+                              </label>
+
+                              <input
+                                type="number"
+                                min={1}
+                                max={responseData?.AllCards.stockAvailable}
+                                value={quantity}
+                                onChange={(e) => setQuantity(e.target.value)}
+                                id="Line1Qty"
+                                className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                              />
+                            </form>
+
+                            <button
+                              className="text-gray-600 transition hover:text-red-600"
+                              onClick={() => setShowSelectedCard(false)}
+                            >
+                              <span className="sr-only">Remove item</span>
+                              <Icons.delete />
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+
+                      <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
+                        <div className="w-screen max-w-lg space-y-4">
+                          <div className="col-span-6">
+                            <button
+                              onClick={handleSubmitCard}
+                              className="block w-full rounded-md bg-black p-2.5 text-sm text-white transition hover:shadow-lg"
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
             </div>
-            <div className="mt-6 flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-900">Total</p>
-              <p className="text-2xl font-semibold text-green-700">
-                Rs. 225.00
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={handlePlaceOrder}
-            className="mb-8 mt-4 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-          >
-            Place Order
-          </button>
+          )}
         </div>
-      </div>
+      </section>
     </Layout>
   )
 }
 
 export async function getServerSideProps(context) {
+  const getCurrentCard = await fetch(
+    process.env.NEXT_PUBLIC_SITE_DOMAIN +
+      "/api/v1/cards/" +
+      context.params.giftCardId
+  )
+  const response = await getCurrentCard.json()
   return {
     props: {
-      giftCardId: context.params,
+      responseData: response.content,
     },
   }
 }
