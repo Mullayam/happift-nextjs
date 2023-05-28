@@ -1,24 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { useRouter as Redirecting } from "next/router"
-import { toast } from "@/hooks/use-toast"
-import { setAuth } from "@/redux/slices/isAuthSlice"
-import { setLoader } from "@/redux/slices/loaderSlice"
-import { googleAuthUrl } from "@/services/oauth-google"
-import axios from "axios"
-import { useDispatch } from "react-redux"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { useRouter as Redirecting } from "next/router";
+import { toast } from "@/hooks/use-toast";
+import { setAuth } from "@/redux/slices/isAuthSlice";
+import { setLoader } from "@/redux/slices/loaderSlice";
+import { googleAuthUrl } from "@/services/oauth-google";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+
+
 
 // updated
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Spinner } from "./spinner"
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Spinner } from "./spinner";
+
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {}
 
@@ -152,7 +155,7 @@ export function UserAuthForm({
         setLoader(false)
       }
     }
-    document.addEventListener("keydown", down)
+   
     return () => document.removeEventListener("keydown", down)
   }, [])
 

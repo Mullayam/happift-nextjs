@@ -4,13 +4,10 @@ import { url } from "inspector"
 import React, { useState } from "react"
 import { InferGetServerSidePropsType } from "next"
 import Head from "next/head"
-import Image from "next/image"
 import { useRouter } from "next/router"
-import { delay } from "@/helpers/functions"
 import { toast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/useCustomHooks"
 import { RootState } from "@/redux/store"
-import axios from "axios"
 import { setCookie } from "cookies-next"
 import { useSelector } from "react-redux"
 
@@ -26,7 +23,7 @@ export default function OrderProcess(
   const router = useRouter()
   const [value, setValue] = useState(100)
   const { giftCardId } = router.query
-   
+
   const [showSelectedCard, setShowSelectedCard] = useState(false)
   const [quantity, setQuantity] = useState<string | number>("1")
   const [responseData, setResponseData] = useState<any>({})
@@ -171,14 +168,13 @@ export default function OrderProcess(
                           <div className="flex flex-1 items-center justify-end gap-2">
                             <form>
                               <label htmlFor="Line1Qty" className="sr-only">
-                                {" "}
-                                Quantity{" "}
+                                Quantity
                               </label>
 
                               <input
                                 type="number"
                                 min={1}
-                                max={responseData?.AllCards.stockAvailable}
+                                max={responseData?.AllCards.stock}
                                 value={quantity}
                                 onChange={(e) => setQuantity(e.target.value)}
                                 id="Line1Qty"
@@ -224,9 +220,9 @@ export default function OrderProcess(
 export async function getServerSideProps(context) {
   const getCurrentCard = await fetch(
     process.env.NEXT_PUBLIC_SITE_DOMAIN +
-      "/api/v1/cards/" +
-      context.params.giftCardId
+      `/api/v1/cards/${context.params.giftCardId};${context.query.type}`
   )
+
   const response = await getCurrentCard.json()
   return {
     props: {

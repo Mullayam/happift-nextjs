@@ -125,10 +125,16 @@ export const Icons = {
       alt="Happift"
     />
   ),
-  badge: ({ children, className }) => (
+  badge: ({
+    children,
+    className,
+  }: {
+    className?: string
+    children: React.ReactNode
+  }) => (
     <div
       id="dropdown-cta"
-      className="w-fit rounded-lg   bg-blue-100  dark:bg-blue-500"
+      className="w-fit rounded-lg bg-blue-100  dark:bg-blue-500"
       role="alert"
     >
       <span

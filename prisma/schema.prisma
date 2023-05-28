@@ -11,17 +11,17 @@ datasource db {
 }
 
 model Users {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  google_id   String?       @default("")
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  google_id   String?     @default("")
   firstName   String
-  lastName    String?       @default("")
-  phone       String?       @default("")
-  email       String        @unique
+  lastName    String?     @default("")
+  phone       String?     @default("")
+  email       String      @unique
   password    String
-  avatar      String?       @default("")
-  role        ROLE          @default(F_3026)
-  permissions PERMISSIONS   @default(B_555)
-  status      STATUS        @default(G_0x0000)
+  avatar      String?     @default("")
+  role        ROLE        @default(F_3026)
+  permissions PERMISSIONS @default(B_555)
+  status      STATUS      @default(G_0x0000)
   tokens      Tokens[]
   payements   Payements[]
   kycDocs     KycDocs?
@@ -47,10 +47,10 @@ model Tokens {
 }
 
 enum ROLE {
-  F_3026
-  U_0012
-  C_8256
-  K_3566
+  F_3026 // no kyc && user
+  U_0012 //guest && pending && no kyc 
+  C_8256 //guest && declined kyc
+  K_3566 // kyc && user
 }
 
 enum PERMISSIONS {
@@ -60,12 +60,12 @@ enum PERMISSIONS {
 }
 
 enum STATUS {
-  G_0x0000
-  E_0x0045
-  T_0x1100
-  O_0x0220
-  F_0x0001
-  F_0x0002
+  G_0x0000 // email not verified
+  E_0x0045 // google account
+  T_0x1100 // email verified
+  O_0x0220 //suspended account
+  F_0x0001 //deactivated accounts
+  F_0x0002 // special privilage to access manage
 }
 
 enum PaymentStatus {
@@ -88,7 +88,7 @@ model Support {
 }
 
 model GiftCards {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   cardName    String
   image       String
   stock       String
@@ -96,7 +96,8 @@ model GiftCards {
   worth       String
   buyPrice    String
   cardDetails String
-  categoryId  Categories[]
+  category  String     
+   
 
   Payements Payements[]
 
@@ -104,12 +105,7 @@ model GiftCards {
   updatedAt DateTime @updatedAt
 }
 
-model Categories {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  catgoryName String
-  categoryId  String    @db.ObjectId
-  giftCards   GiftCards @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-}
+ 
 
 model ListedCards {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
@@ -151,11 +147,12 @@ model KycDocs {
   id_proof String
   pancard  String
   selfie   String
-  userId   String @db.ObjectId  
+  userId   String @db.ObjectId
   User     Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   status    PaymentStatus
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+
   @@unique([userId])
 }

@@ -6,7 +6,8 @@ import SellCards from "@/components/sellCards"
 
 export default function IndexPage(props) {
   const { user } = useAuth()
-  const role = user?.role === "C_8256" ? true : false
+  const role = user?.role === "K_3566" ? true : false
+  console.log(user?.role)
   return (
     <Layout>
       <Head>

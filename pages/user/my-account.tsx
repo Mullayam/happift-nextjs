@@ -56,13 +56,14 @@ export default function MyAccount(props) {
           </div>
           <div className="mb-4 flex h-48 animate-pulse items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
             {/* <WarningPopup /> */}
-            <h1 className="text-5xl font-extrabold  ">Comming Soon</h1>
+            <h1 className="text-5xl font-extrabold ">Comming Soon</h1>
           </div>
 
           <div className="mb-4 grid grid-cols-2 gap-4">
             <div className="flex h-28 animate-pulse items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500"> </p>
             </div>
+             
             <div className="flex h-28  animate-pulse items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
               <p className="text-2xl text-gray-400 dark:text-gray-500"> </p>
             </div>

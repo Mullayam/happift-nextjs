@@ -46,6 +46,9 @@ export async function retriveCookie(allCookies: any) {
   return await response
 }
 
+export function removeDuplicates(arr) {
+  return arr.filter((item, index) => arr.indexOf(item) === index)
+}
 export async function delay(second: number = 1000) {
   return await new Promise((resolve) => setTimeout(resolve, second))
 }

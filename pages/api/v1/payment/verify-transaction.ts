@@ -2,8 +2,10 @@
 
 import https from "https";
 import type { NextApiRequest, NextApiResponse } from "next";
-import PaytmChecksum from "@/services/paytm/PaytmChecksum"
-import { Prisma, PrismaClient } from "@prisma/client"
+import PaytmChecksum from "@/services/paytm/PaytmChecksum";
+import { Prisma, PrismaClient } from "@prisma/client";
+
+
 
 import { responseBody } from "@/types/txnStatus"
 
@@ -61,6 +63,14 @@ export default async function handler(
     })
     post_res.on("end", async function () {
       if (response.body.resultInfo.resultCode === "01") {
+        await prisma.giftCards.update({
+          where: {
+            id: decodedData.giftCardId,
+          },
+          data: {
+            isAvailable: false,
+          },
+        })
         status = "SUCCESS"
       } else {
         status = response.body.resultInfo.resultStatus.split("_")[1]
@@ -72,7 +82,6 @@ export default async function handler(
             { giftCardId: decodedData.giftCardId },
           ],
         },
-
         data: {
           paymentDetails: response.body,
           status,

@@ -35,25 +35,17 @@ import {
 
 const Menu = [
   {
-    label: "Dashboard",
-    link: "/user/dashboard",
-  },
-  {
     label: "Add New Card",
-    link: "./manage-cards/add-new-card",
+    link: "/user/manage/cards/handle-card",
   },
 
   {
-    label: "Edit Card",
-    link: "./manage-cards/edit-card",
-  },
-  {
     label: "Listed Cards",
-    link: "./manage-cards/listed-cards",
+    link: "/user/manage/cards/listed-cards",
   },
   {
     label: "All Payments",
-    link: "./manage-cards/all-payments",
+    link: "/user/manage/all-payments",
   },
 ]
 export function ManageCardsDropdownMenu() {
@@ -104,13 +96,6 @@ export function ManageCardsDropdownMenu() {
         <DropdownMenuItem>
           <Github className="mr-2 h-4 w-4" />
           <span>GitHub</span>
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

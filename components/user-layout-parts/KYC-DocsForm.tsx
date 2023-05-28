@@ -1,33 +1,36 @@
-import React, { useState } from "react"
-import dynamic from "next/dynamic"
-import Image from "next/image"
-import { toast } from "@/hooks/use-toast"
-import { useAuth } from "@/hooks/useCustomHooks"
-import { PaymentStatus } from "@prisma/client"
-import axios from "axios"
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useCustomHooks";
+import { PaymentStatus } from "@prisma/client";
+import axios from "axios";
 
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import ImageSkelton from "../ImageSkelton"
-import { Button } from "../ui/button"
+
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import ImageSkelton from "../ImageSkelton";
+import { Button } from "../ui/button";
+
 
 type UploadableFiles = {
   id_proof?: File
   pancard?: File
   selfie?: File
 }
-type ImgaesType = {
-  id_proof?: string
-  pancard?: string
-  selfie?: string
-  status?: PaymentStatus
+
+type KinImage = {
+  [key: string]: any
 }
+const kkyCSatus = ["VERIFIED", "PENDING"]
+
 export default function KYCDocsForm() {
   const { setLoader, user, kycDocImg, setKycDocImg } = useAuth()
 
-  const [images, setImages] = useState<ImgaesType>({})
+  const [images, setImages] = useState<KinImage[]>([])
   const [file, setFile] = useState<UploadableFiles | []>([])
-
+  const updatedStatus = kkyCSatus.includes(images[0]?.status)
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return
@@ -97,17 +100,21 @@ export default function KYCDocsForm() {
   }
   React.useEffect(() => {
     getImages()
-    console.log(images)
+
     setKycDocImg(true)
   }, [])
 
   return (
     <>
-      {images.status !== "VERIFIED" ? (
+      {updatedStatus ? (
         <span className="mb-10 mt-4 text-amber-600">
-          KYC is Under Progress... Current Status: {images.status}
+          Current Status: {images[0]?.status}
         </span>
-      ) : null}
+      ) : (
+        <span className="mb-10 mt-4 text-amber-600">
+          KYC is Under Progress... Current Status: {images[0]?.status}
+        </span>
+      )}
       <div className="flex w-full justify-stretch gap-4">
         <div>
           <form encType="multipart/form-data" onSubmit={handleKYC_DocsForm}>
@@ -118,7 +125,7 @@ export default function KYCDocsForm() {
                 type="file"
                 name="id_proof"
                 accept="image/*"
-                disabled={images.status !== "VERIFIED"}
+                disabled={updatedStatus}
                 onChange={onFileChange}
                 onClick={onClick}
               />
@@ -130,7 +137,7 @@ export default function KYCDocsForm() {
                 id="picture"
                 type="file"
                 name="pancard"
-                disabled={images.status !== "VERIFIED"}
+                disabled={updatedStatus}
                 accept="image/*"
                 onChange={onFileChange}
                 onClick={onClick}
@@ -142,7 +149,7 @@ export default function KYCDocsForm() {
                 id="picture"
                 type="file"
                 name="selfie"
-                disabled={images.status !== "VERIFIED"}
+                disabled={updatedStatus}
                 accept="image/*"
                 onChange={onFileChange}
                 onClick={onClick}
@@ -151,14 +158,9 @@ export default function KYCDocsForm() {
                 Take Selfie with Pan Card in Hand
               </small>
             </div>
-            {/* {base64 && (
-        <Image src={base64} width={300} height={400} alt="Uploaded Image" />
-      )} */}
 
-            <Button disabled={images.status !== "VERIFIED"}>
-              {images.status !== "VERIFIED"
-                ? "Already Uploaded"
-                : "SaveChanges"}
+            <Button disabled={updatedStatus}>
+              {updatedStatus ? "Already Uploaded" : "SaveChanges"}
             </Button>
           </form>
         </div>
@@ -166,9 +168,27 @@ export default function KYCDocsForm() {
           {kycDocImg && (
             <div className="mt-5 flex h-48   justify-center  rounded p-4">
               <div className="grid grid-cols-3 items-center justify-center gap-10  ">
-                <ImageSkelton src={images?.id_proof} />
-                <ImageSkelton src={images?.pancard} />
-                <ImageSkelton src={images?.selfie} />
+                {images.map((image, i) => {
+                  return (
+                    <>
+                      <ImageSkelton
+                        key={4_563_543_542_351}
+                        alt={"id_proof"}
+                        src={image?.id_proof}
+                      />
+                      <ImageSkelton
+                        key={10_542_054_346}
+                        alt={"pancard"}
+                        src={image?.pancard}
+                      />
+                      <ImageSkelton
+                        key={45_479_613_168}
+                        alt={"selfie"}
+                        src={image?.selfie}
+                      />
+                    </>
+                  )
+                })}
               </div>
             </div>
           )}

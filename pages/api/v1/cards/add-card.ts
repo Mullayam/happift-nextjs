@@ -1,7 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import type { NextApiRequest, NextApiResponse } from "next"
-import { PrismaClient } from "@prisma/client"
+import type { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
+
+
+
+
 
 const prisma = new PrismaClient()
 
@@ -15,7 +19,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const newCardInfo = req.body.newCardInfo
+ if(req.method === "POST"){
+ const newCardInfo = req.body.newCardInfo
   try {
     await prisma.giftCards.create({ data: newCardInfo })
     return res
@@ -24,4 +29,17 @@ export default async function handler(
   } catch (error) {
     return res.status(200).json({ success: false, message: error.message })
   }
+ }
+ if (req.method === "PUT") {
+   const newCardInfo = req.body.newCardInfo
+   const id = req.body.id
+  try {
+    await prisma.giftCards.update({where:{id}, data: newCardInfo })
+    return res
+      .status(200)
+      .json({ success: true, message: "Card Updated Successfully" })
+  } catch (error) {
+    return res.status(200).json({ success: false, message: error.message })
+  }
+ }
 }

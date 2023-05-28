@@ -24,7 +24,7 @@ export function WalletPopover() {
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Your Wallet</h4>
             <p className="text-muted-foreground text-sm">
-              Set the dimensions for the layer.
+            Add Money to Wallet
             </p>
           </div>
           <div className="grid gap-2">

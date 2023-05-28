@@ -16,8 +16,8 @@ export default function DisplayCard({ worth }: { worth: string }) {
   const router = useRouter()
   const loading = false
   const [cards, setCards] = React.useState([])
-  function redirect(id: string): any {
-    router.push(`/user/payment/${id}/order-process`)
+  function redirect(id: string, category: string): any {
+    router.push(`/user/payment/${id}/order-process?type=${category}`)
   }
   React.useEffect(() => {
     async function getAllCards() {
@@ -52,7 +52,7 @@ export default function DisplayCard({ worth }: { worth: string }) {
                     <h4 className="text-sm font-semibold">
                       <Button
                         disabled={loading}
-                        onClick={() => redirect(card.id)}
+                        onClick={() => redirect(card.id, card.category)}
                         className="cursor-pointer bg-orange-600"
                       >
                         {loading ? (

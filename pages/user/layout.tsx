@@ -20,6 +20,7 @@ export default function UserLayout({ children }) {
         const data = getCookie("access_token")
         const DecryptToken = await make.decrypt(data)
         const payload = await DecryptData(`${DecryptToken}`)
+
         dispatch(setAuth(true))
         dispatch(setUserData(payload))
       }

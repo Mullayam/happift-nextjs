@@ -1,45 +1,21 @@
-/* eslint-disable @next/next/no-img-element */
-
 import React from "react"
 import Head from "next/head"
+import axios from "axios"
 
-import { Payment, columns } from "@/components/user-layout-parts/table/columns"
-import { DataTable } from "@/components/user-layout-parts/table/dataTable"
+import { CardsTable } from "@/components/user-layout-parts/CardsTable"
+import { CustomScrollArea } from "@/components/user-layout-parts/ScrollArea"
 import UserLayout from "./layout"
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-]
 export default function AccountSettings(props) {
+  const [giftCards, setGiftCards] = React.useState([])
+  const getCards = async () => {
+    const { data } = await axios.get("/api/v1/cards/get-cards")
+    setGiftCards(data.content.AllCards)
+  }
+  React.useEffect(() => {
+    getCards()
+  }, [])
+
   return (
     <UserLayout>
       <Head>
@@ -57,7 +33,11 @@ export default function AccountSettings(props) {
       </Head>
       <div className="p-4 sm:ml-64">
         <div className="mt-14 rounded-lg  p-4 dark:border-gray-700">
-          <DataTable columns={columns} data={data} />
+          <div className="mx-2 flex flex-row gap-4 rounded-md border border-solid">
+            <CustomScrollArea>
+              <CardsTable cards={giftCards} />
+            </CustomScrollArea>
+          </div>
         </div>
       </div>
     </UserLayout>

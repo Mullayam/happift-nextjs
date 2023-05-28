@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { toast } from "@/hooks/use-toast"
 import { setAuth, setUserData } from "@/redux/slices/isAuthSlice"
+import { setLoader } from "@/redux/slices/loaderSlice"
 import { useAppDispatch } from "@/redux/store"
 import { deleteCookie } from "cookies-next"
 import {
@@ -82,7 +83,9 @@ export default function UserDropdownMenu() {
   const dispatch = useAppDispatch()
   async function handleLogout() {
     deleteCookie("access_token")
+    deleteCookie("allowed")
     dispatch(setAuth(false))
+    dispatch(setLoader(false))
     dispatch(setUserData(null))
     toast({
       title: "Logout Successfully",

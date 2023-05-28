@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 
 import React from "react"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import { delay } from "@/helpers/functions"
 import { toast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/useCustomHooks"
@@ -19,7 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import UserLayout from "../layout"
+import WarningPopup from "@/components/user-layout-parts/warning"
+import UserLayout from "../../layout"
 
 type CardInfo = {
   cardName: String
@@ -30,17 +33,26 @@ type CardInfo = {
   buyPrice: String
   cardDetails: string
 }
-export default function AccountSettings(props) {
+export default function AccountSettings(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   const { setLoader } = useAuth()
+  const router = useRouter()
+  const card = props?.existingCard
+  const { giftCardId } = router.query
+
   const [newCardInfo, setNewCardInfo] = React.useState<CardInfo>({
-    cardName: "",
-    image: "  ",
-    stock: "0",
-    isAvailable: false,
-    worth: "0",
-    buyPrice: "1",
-    cardDetails: `Gift Card Pin : XXXXX \nGift Card Number : XXXXXXXXXXXX \nExpiry:23/05/2023`,
+    cardName: card?.cardName || "",
+    image: card?.image || "  ",
+    stock: card?.stock || "0",
+    isAvailable: card?.isAvailable || false,
+    worth: card?.worth || "0",
+    buyPrice: card?.buyPrice || "1",
+    cardDetails:
+      card?.cardDetails ||
+      `Gift Card Pin : XXXXX \nGift Card Number : XXXXXXXXXXXX \nExpiry:23/05/2023`,
   })
+
   const [cardImg, setCardImg] = React.useState<File | null>(null)
 
   function handleOnchange(e) {
@@ -75,13 +87,37 @@ export default function AccountSettings(props) {
     } else {
       toast({ title: data.message, variant: "destructive" })
     }
-    console.log(data.message)
+
+    setLoader(false)
+  }
+
+  async function handleUpdateCard() {
+    if (Number(newCardInfo.worth) < Number(newCardInfo.buyPrice)) {
+      return toast({
+        title: "Selling Price not be greater than worth Of Voucher",
+        variant: "destructive",
+      })
+    }
+
+    setLoader(true)
+    const { data } = await axios.put("/api/v1/cards/add-card", {
+      newCardInfo,
+      id: card?.id,
+    })
+
+    if (data.success) {
+      toast({ title: data.message })
+      await delay(2000)
+    } else {
+      toast({ title: data.message, variant: "destructive" })
+    }
+
     setLoader(false)
   }
   return (
     <UserLayout>
       <Head>
-        <title>Add New Gift Card - Happift</title>
+        <title> {giftCardId ? "Edit " : "Add New"} Gift Card - Happift</title>
         <meta
           name="description"
           content="About  | Send Us Your expeience feedback with our site "
@@ -95,15 +131,23 @@ export default function AccountSettings(props) {
       </Head>
       <div className="p-4 sm:ml-64">
         <div className="mt-14 rounded-lg  p-4 dark:border-gray-700">
+          {card?.noCard && <WarningPopup text="Card Not Found" type="error" />}
+
           <div className="mb-4 flex h-fit  items-center justify-center rounded bg-transparent dark:bg-gray-800">
-            {/* <WarningPopup /> */}
-            <h1 className="text-5xl font-extrabold  ">Add New Card</h1>
+            <h1 className="text-5xl font-extrabold  ">
+              {giftCardId ? "Edit " : "Add New"} Card
+            </h1>
           </div>
           <Card>
             <div className="grid md:grid-cols-3 md:gap-6">
               <div className="space-y-1">
                 <Label htmlFor="card_name">Card Name</Label>
-                <Input id="cardName" type="text" onChange={handleOnchange} />
+                <Input
+                  id="cardName"
+                  defaultValue={newCardInfo.cardName as string}
+                  type="text"
+                  onChange={handleOnchange}
+                />
               </div>
 
               <div className="grid w-full   items-center gap-1.5">
@@ -119,9 +163,15 @@ export default function AccountSettings(props) {
               <div className="space-y-1">
                 <Select>
                   <SelectTrigger className="mt-8 w-full">
-                    <SelectValue placeholder="Is Available" />
+                    <SelectValue placeholder="Is Available " />
                   </SelectTrigger>
                   <SelectContent>
+                    {giftCardId && (
+                      <SelectItem value={card?.isAvailable}>
+                        {card?.isAvailable}
+                      </SelectItem>
+                    )}
+
                     <SelectItem value="true">Available</SelectItem>
                     <SelectItem value="false">Out of Stock </SelectItem>
                   </SelectContent>
@@ -134,7 +184,7 @@ export default function AccountSettings(props) {
                 <Input
                   id="worth"
                   type="number"
-                  defaultValue={0}
+                  defaultValue={newCardInfo.worth as string}
                   onChange={handleOnchange}
                 />
               </div>
@@ -143,7 +193,7 @@ export default function AccountSettings(props) {
                 <Input
                   id="buyPrice"
                   type="number"
-                  defaultValue={1}
+                  defaultValue={newCardInfo.buyPrice as string}
                   onChange={handleOnchange}
                 />
               </div>
@@ -152,7 +202,7 @@ export default function AccountSettings(props) {
                 <Input
                   id="stock"
                   type="number"
-                  defaultValue={0}
+                  defaultValue={newCardInfo.stock as string}
                   onChange={handleOnchange}
                 />
               </div>
@@ -162,13 +212,14 @@ export default function AccountSettings(props) {
               <Label htmlFor="message-2">Card Details</Label>
               <Textarea
                 id="cardDetails"
-                defaultValue={newCardInfo.cardDetails}
+                value={newCardInfo.cardDetails}
                 onChange={handleOnchange}
               />
+
               <div className="text-muted-foreground text-sm">
                 Enter Card Details Gift Card Number/Pin/Code{" "}
                 {newCardInfo.cardDetails === "" ? (
-                  <p>
+                  <small>
                     <pre>
                       eg.
                       <code>
@@ -176,16 +227,46 @@ export default function AccountSettings(props) {
                         Voucher Code: XXXXXXXXXXXX Expiry:23/05/2023
                       </code>
                     </pre>
-                  </p>
+                  </small>
                 ) : null}
               </div>
             </div>
-            <Button onClick={handleAddCard} variant="default">
-              Add New Card
+            <Button
+              onClick={giftCardId ? handleUpdateCard : handleAddCard}
+              variant="default"
+            >
+              {giftCardId ? "Update Card" : "Add New Card"}
             </Button>
           </Card>
         </div>
       </div>
     </UserLayout>
   )
+}
+export async function getServerSideProps(ctx) {
+  let existingCard
+
+  if (ctx.query.giftCardId) {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/v1/cards/get-cards`,
+      {
+        method: "POST",
+
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: ctx.query.giftCardId }),
+      }
+    )
+
+    existingCard = await response.json()
+
+    return {
+      props: {
+        existingCard: existingCard?.content,
+      },
+    }
+  }
+  return { props: { existingCard: {} } }
 }

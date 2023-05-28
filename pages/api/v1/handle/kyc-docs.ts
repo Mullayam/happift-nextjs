@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import type { NextApiRequest, NextApiResponse } from "next"
-import { PrismaClient } from "@prisma/client"
+import type { NextApiRequest, NextApiResponse } from "next";
+import { PaymentStatus, PrismaClient, ROLE } from "@prisma/client"
 import PublitioAPI from "publitio_js_sdk"
 
 const prisma = new PrismaClient()
@@ -19,14 +19,13 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const user_id = req.query.userId as string
+
   if (req.method === "POST") {
     const images = req.body.KYC_Images
     const userId = req.body.userId
     let imagesData = []
     await images.map(async (image) => {
       const DataUrl = image.replace(/^data:image\/\w+;base64,/, "")
-      // console.log(DataUrl)
-      //   var ext = StoredImagesObject[0].image.split(";")[0].match(/jpeg|png|gif/)[0]
       const file = new Buffer(DataUrl, "base64")
       await publitio
         .uploadFile(file, "file")
@@ -51,18 +50,61 @@ export default async function handler(
       success: true,
       message: "Image successfully uploaded",
     })
-  } else {
-    const KYC_Images = await prisma.kycDocs.findUnique({
+  } else if (req.method === "PUT") {
+    const status = req.body.status as PaymentStatus
+    const id = req.body.id as string
+    const userId = req.body.userId as string
+    const role = req.body.role as ROLE
+    await prisma.kycDocs.update({
       where: {
-        userId: user_id,
+        id,
       },
-      select: {
-        id_proof: true,
-        pancard: true,
-        selfie: true,
-        status: true,
+      data: {
+        status,
       },
     })
+    await prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role,
+      },
+    })
+    return res.status(200).json({ success: true, message: "Status Updated" })
+  } else {
+    let KYC_Images
+
+    if (user_id) {
+      KYC_Images = await prisma.kycDocs.findMany({
+        where: {
+          OR: [{ userId: user_id }, { id: req.query.kycDocId as string }],
+        },
+        select: {
+          id_proof: true,
+          pancard: true,
+          selfie: true,
+          status: true,
+        },
+      })
+    } else {
+      KYC_Images = await prisma.kycDocs.findMany({
+        select: {
+          id: true,
+          id_proof: true,
+          pancard: true,
+          selfie: true,
+          status: true,
+          User: {
+            select: {
+              firstName: true,
+              email: true,
+            },
+          },
+        },
+      })
+    }
+
     return res.status(200).json({
       success: true,
       content: KYC_Images,

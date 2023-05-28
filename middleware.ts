@@ -11,11 +11,15 @@ export async function middleware(request: NextRequest, res: NextResponse) {
   if (request.nextUrl.pathname.startsWith("/user")) {
     let loginUrl = new URL("/auth/login", request.url)
     loginUrl.searchParams.set("callbackURL", request.nextUrl.pathname)
-    if (request.cookies.has("access_token")) {
-      console.log(request.cookies.get("access_token"))
-    } else {
-      return NextResponse.redirect(loginUrl)
-    }
+    if (!request.cookies.has("access_token")) {
+        return NextResponse.redirect(loginUrl)
+    }  
+  }
+    if (request.nextUrl.pathname.startsWith("/user/manage")) {
+    let loginUrl = new URL("/user/my-account", request.url) 
+    if (request.cookies.get("allowed").value !== "F_0x0002") {
+        return NextResponse.redirect(loginUrl)
+    }  
   }
 }
 
