@@ -1,15 +1,18 @@
-import React, { Suspense } from "react"
+import React, { Suspense } from "react";
 import { DecryptData } from "@/helpers/decryptTokenData"
-import { AuthContextProvider, useAuth } from "@/hooks/useCustomHooks"
-import { setAuth, setUserData } from "@/redux/slices/isAuthSlice"
-import { getCookie, hasCookie } from "cookies-next"
-import { useDispatch } from "react-redux"
+import { useAuth } from "@/hooks/useCustomHooks"
+import { setAuth, setUserData } from "@/redux/slices/isAuthSlice";
+import { getCookie, hasCookie } from "cookies-next";
+import { useDispatch } from "react-redux";
 
-import make from "@/lib/secure"
-import { Spinner } from "@/components/spinner"
-import { RightClickMenu } from "@/components/user-layout-parts/ContextMenu"
-import UserLayoutSidebar from "@/components/user-layout-parts/sidebar"
-import UserLayoutLoading from "./loading"
+
+
+import make from "@/lib/secure";
+import { Spinner } from "@/components/spinner";
+import { RightClickMenu } from "@/components/user-layout-parts/ContextMenu";
+import UserLayoutSidebar from "@/components/user-layout-parts/sidebar";
+import UserLayoutLoading from "./loading";
+
 
 export default function UserLayout({ children }) {
   const { loader } = useAuth()

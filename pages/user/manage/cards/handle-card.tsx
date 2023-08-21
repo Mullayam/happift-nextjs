@@ -50,7 +50,7 @@ export default function AccountSettings(
     buyPrice: card?.buyPrice || "1",
     cardDetails:
       card?.cardDetails ||
-      `Gift Card Pin : XXXXX \nGift Card Number : XXXXXXXXXXXX \nExpiry:23/05/2023`,
+      `Balance:X \nGift Card Pin : XXXXX \nGift Card Number : XXXXXXXXXXXX \nExpiry:23/05/2023`,
   })
 
   const [cardImg, setCardImg] = React.useState<File | null>(null)
@@ -223,8 +223,9 @@ export default function AccountSettings(
                     <pre>
                       eg.
                       <code>
-                        Gift Card Pin : XXXXX Gift Card Number : XXXXXXXXXXXX
-                        Voucher Code: XXXXXXXXXXXX Expiry:23/05/2023
+                        Balance:X Gift Card Pin : XXXXX Gift Card Number :
+                        XXXXXXXXXXXX Voucher Code: XXXXXXXXXXXX
+                        Expiry:23/05/2023
                       </code>
                     </pre>
                   </small>

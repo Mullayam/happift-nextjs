@@ -58,28 +58,23 @@ export default function UserLayoutSidebar() {
         id="logo-sidebar"
         className="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r border-gray-200 bg-white pt-20 transition-transform dark:border-gray-700 dark:bg-gray-800 sm:translate-x-0"
         aria-label="Sidebar"
-         aria-hidden="true"
+        aria-hidden="true"
       >
         <div className="h-full overflow-y-auto bg-white px-3 pb-4 dark:bg-gray-800">
           {status && (
             <ul className="space-y-2 font-medium">
-               <li>
-                  <Link
-                href="/user/dashboard"
-                className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3 flex-1 whitespace-nowrap">
-                 
-                Dashboard
-                </span>
-                 
-              </Link>
+              <li>
+                <Link
+                  href="/user/dashboard"
+                  className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                >
+                  <span className="ml-3 flex-1 whitespace-nowrap">
+                    Dashboard
+                  </span>
+                </Link>
               </li>
               <li>
-                <figure
-                  className="group flex w-full items-center rounded-lg p-2 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                 
-                >
+                <figure className="group flex w-full items-center rounded-lg p-2 text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                   <span
                     className="ml-3 flex-1 whitespace-nowrap text-left"
                     sidebar-toggle-item="true"
@@ -90,20 +85,20 @@ export default function UserLayoutSidebar() {
                   <ManageCardsDropdownMenu />
                 </figure>
               </li>
-             
-            <li>
+
+              <li>
                 <Link
-                href="/user/manage/kyc-approval"
-                className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3 flex-1 whitespace-nowrap">
-                  KYC Approval
-                </span>
-                <span className="ml-3 inline-flex items-center justify-center rounded-full bg-gray-200 px-2 text-sm font-medium text-gray-800 dark:bg-pink-700 dark:text-gray-300">
-                  40
-                </span>
-              </Link>
-            </li>
+                  href="/user/manage/kyc-approval"
+                  className="flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                >
+                  <span className="ml-3 flex-1 whitespace-nowrap">
+                    KYC Approval
+                  </span>
+                  <span className="ml-3 inline-flex items-center justify-center rounded-full bg-gray-200 px-2 text-sm font-medium text-gray-800 dark:bg-pink-700 dark:text-gray-300">
+                    40
+                  </span>
+                </Link>
+              </li>
             </ul>
           )}
 

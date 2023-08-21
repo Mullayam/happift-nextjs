@@ -93,13 +93,11 @@ const PaymentResponse = (
         </>
       ) : txnStatus.body.resultInfo.resultCode === "01" ? (
         <>
-         <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
+          <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
             <div className="mx-auto max-w-screen-sm text-center">
               <h1 className="mb-4 text-7xl font-extrabold tracking-tight text-green-600 dark:text-green-500 lg:text-9xl">
-              Payment Successfull 
-              Redirecting ...
+                Payment Successfull Redirecting ...
               </h1>
-              
             </div>
           </div>
         </>
@@ -146,7 +144,7 @@ const PaymentResponse = (
 export default PaymentResponse
 export async function getServerSideProps(context) {
   let getNamedCookie
-  console.log(context.res.body)
+
   if (context.req.headers.cookie) {
     getNamedCookie =
       (await retriveCookie(context.req.headers.cookie.split(";"))) || undefined

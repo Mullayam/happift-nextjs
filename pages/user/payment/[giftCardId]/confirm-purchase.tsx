@@ -52,7 +52,7 @@ export default function ConfirmPurchase(props) {
       <div className="flex flex-col items-center border-b bg-white py-4 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <span
           onClick={() => router.back()}
-          className="cursor-pointer text-2xl font-bold  text-gray-800"
+          className="cursor-pointer rounded-lg border border-slate-300 bg-gray-400 p-2 text-2xl font-bold text-gray-800"
         >
           <ChevronLeft />
         </span>

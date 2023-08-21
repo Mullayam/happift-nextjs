@@ -4,6 +4,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PaymentStatus, PrismaClient, ROLE } from "@prisma/client"
 import PublitioAPI from "publitio_js_sdk"
 
+
+
+
+
 const prisma = new PrismaClient()
 type Data = {
   success: boolean
@@ -63,6 +67,7 @@ export default async function handler(
         status,
       },
     })
+  
     await prisma.users.update({
       where: {
         id: userId,

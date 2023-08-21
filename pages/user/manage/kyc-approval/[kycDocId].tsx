@@ -1,21 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 
-import React from "react"
-import { InferGetServerSidePropsType } from "next"
-import Head from "next/head"
-import { useAuth } from "@/hooks/useCustomHooks"
-import axios from "axios"
-import { ChevronsUpDown, Plus, X } from "lucide-react"
+import React from "react";
+import { InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import { useAuth } from "@/hooks/useCustomHooks";
+import axios from "axios";
+import { ChevronsUpDown, Plus, X } from "lucide-react";
 
-import ImageSkelton from "@/components/ImageSkelton"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import UserLayout from "../../layout"
+
+
+import ImageSkelton from "@/components/ImageSkelton";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import UserLayout from "../../layout";
+
 
 export default function KYCDetailsOfUser(
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -32,10 +31,10 @@ export default function KYCDetailsOfUser(
       role = "U_0012"
     }
     if (status === "VERIFIED") {
-      role = "C_8256"
+      role = "K_3566"
     }
     if (status === "DECLINED") {
-      role = "K_3566"
+      role = "C_8256"
     }
     await axios.put("/api/v1/handle/kyc-docs", {
       status,

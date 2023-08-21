@@ -11,20 +11,21 @@ datasource db {
 }
 
 model Users {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  google_id   String?     @default("")
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  google_id   String?        @default("")
   firstName   String
-  lastName    String?     @default("")
-  phone       String?     @default("")
-  email       String      @unique
+  lastName    String?        @default("")
+  phone       String?        @default("")
+  email       String         @unique
   password    String
-  avatar      String?     @default("")
-  role        ROLE        @default(F_3026)
-  permissions PERMISSIONS @default(B_555)
-  status      STATUS      @default(G_0x0000)
+  avatar      String?        @default("")
+  role        ROLE           @default(F_3026)
+  permissions PERMISSIONS    @default(B_555)
+  status      STATUS         @default(G_0x0000)
   tokens      Tokens[]
   payements   Payements[]
   kycDocs     KycDocs?
+  payouts     PayoutDetails?
 
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
@@ -88,24 +89,36 @@ model Support {
 }
 
 model GiftCards {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  cardName       String
+  image          String
+  stock          String
+  cardDetails    CardsDetails[]
+  category       String
+  Payements      Payements[]
+  availableCards String[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model CardsDetails {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   cardName    String
   image       String
   stock       String
   isAvailable Boolean
-  worth       String
+  balance     String
   buyPrice    String
-  cardDetails String
-  category  String     
-   
-
-  Payements Payements[]
+  voucherCode String?
+  voucherPin  String?
+  voucher     String?
+  expires     String
+  giftCardId  String    @db.ObjectId
+  giftCards   GiftCards @relation(fields: [giftCardId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
- 
 
 model ListedCards {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
@@ -155,4 +168,15 @@ model KycDocs {
   updatedAt DateTime      @updatedAt
 
   @@unique([userId])
+}
+
+model PayoutDetails {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  vpa       String
+  name      String
+  userId    String   @unique @db.ObjectId
+  User      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isvalid   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

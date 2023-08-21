@@ -9,6 +9,7 @@ import { hasCookie, removeCookies, setCookie } from "cookies-next"
 import { PaytmConfig } from "@/config/site"
 import make from "@/lib/secure"
 
+
 const prisma = new PrismaClient()
 type txnAmount = {
   value: string
@@ -30,10 +31,10 @@ type BodyType = {
   txnAmount: txnAmount
   userInfo: userInfo
 }
-type PaytmParamsBody = {
-  body?: BodyType
-  head?: any
-}
+  type PaytmParamsBody = {
+    body?: BodyType
+    head?: any
+  }
 type ResponseType = {
   data?: any
 }
